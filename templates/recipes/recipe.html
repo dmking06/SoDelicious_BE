@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Details for {{ recipe.name }}</title>
+  {% load static %}
+<!--  <link rel="stylesheet" href="{% static 'students/basic.css' %}" type="text/css">-->
+</head>
+<body>
+<table>
+  <tr>
+    <td>Recipe</td>
+    <td> {{ recipe.name }}</td>
+  </tr>
+  <tr>
+    <td>Description</td>
+    <td> {{ recipe.description }}</td>
+  </tr>
+  <tr>
+    <td>Category</td>
+    <td> {% for category in recipe.category.all %}{{ category }}<br />{% endfor %}</td>
+  </tr>
+  <tr>
+    <td>Prep Time</td>
+    <td> {{ recipe.prep_time }}</td>
+  </tr>
+  <tr>
+    <td>Cook Time</td>
+    <td> {{ recipe.cook_time }}</td>
+  </tr>
+  <tr>
+    <td>Total Time</td>
+    <td> {{ recipe.total_time }}</td>
+  </tr>
+  <tr>
+    <td>Servings</td>
+    <td> {{ recipe.servings }}</td>
+  </tr>
+  <tr>
+    <td>Date Created</td>
+    <td> {{ recipe.date_created }}</td>
+  </tr>
+  <tr>
+    <td>Ingredients</td>
+    <td> {{ recipe.ingredients }}</td>
+  </tr>
+  <tr>
+    <td>Steps</td>
+    <td> {{ recipe.steps }}</td>
+  </tr>
+</table>
+</body>
+</html>

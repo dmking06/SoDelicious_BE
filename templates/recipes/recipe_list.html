@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Recipe List</title>
+  {% load static %}
+<!--  <link rel="stylesheet" href="{% static 'students/basic.css' %}" type="text/css">-->
+</head>
+<body>
+<h3>Recipe List:</h3>
+{% if recipe_list %}
+<ul>
+  {% for recipe in recipe_list %}
+  <li><a href="{% url 'recipes:recipe' recipe.id %}">{{ recipe.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No data is available.</p>
+{% endif %}
+</body>
+</html>
