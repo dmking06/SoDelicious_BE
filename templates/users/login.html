@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<body>
+{% include 'recipes/link_header.html' %}
+<h1 class="text-center"><strong>Login</strong></h1>
+<br/>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<form action="{% url 'users:login' %}" method="POST">
+    {% csrf_token %}
+    <!--    <div>-->
+    <!--        {% if form.errors %}-->
+    <!--            {% for field in form %}-->
+    <!--                {% for error in field.errors %}-->
+    <!--                <div class="alert alert-danger">-->
+    <!--                    <strong>{{field.label}}: {{ error|escape }}</strong>-->
+    <!--                </div>-->
+    <!--                {% endfor %}-->
+    <!--            {% endfor %}-->
+    <!--            {% for error in form.non_field_errors %}-->
+    <!--                <div class="alert alert-danger">-->
+    <!--                    <strong>{{ error|escape }}</strong>-->
+    <!--                </div>-->
+    <!--            {% endfor %}-->
+    <!--        {% endif %}-->
+    <!--    </div>-->
+    <!--    <br/>-->
+    <br/>
+    {{ form.email.label }}
+    {{ form.email }}
+    {{ form.email.errors.as_text|escape }}
+
+    <br/>
+    <br/>
+    {{ form.password.label }}
+    {{ form.password }}
+    {{ form.password.errors.as_text|escape }}
+    <p><input type="submit" value="Log In"></p>
+</form>
+<br/>
+<p><a href="{% url 'reset_password' %}">Forgot your password?</a></p>
+<p>Not registered? <a href="{% url 'users:register' %}">Sign up!</a></p>
+</body>
+</html>

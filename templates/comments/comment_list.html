@@ -1,0 +1,47 @@
+<div class="comment_list" id="comment_list">
+    {% spaceless %}
+    {% for comment in page_obj %}
+    <div class="comment_header" id="comment_{{ comment.id }}">{{ comment.profile|title }}&nbsp;&nbsp;|&nbsp;
+        Posted {{ comment.created_on|date:"M d, Y h:i A" }}&nbsp;
+        {% if comment.edited %}
+        |&nbsp;&nbsp;<i title="Edited on {{ comment.created_on }}">(edited {{ comment.edited_on|timesince }} ago)</i>
+        {% endif %}
+        {% if user == comment.profile.user %}
+        &nbsp;
+        <a href="{% url 'comments:edit_comment' comment.id %}"><i class="fa fa-edit" title="Edit comment"></i></a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="{% url 'comments:delete_comment' comment.id %}"><i class="fa fa-trash" title="Delete comment"></i></a>
+        <br />
+        {% endif %}
+        {% if "comments/" in request.path %}
+        <a href="{% url 'recipes:recipe' comment.recipe.id %}">{{ comment.recipe.name|truncatechars:50 }}</a>
+        <br/>
+        {% endif %}
+    </div>
+    <div class="comment_body">{{ comment.body|linebreaksbr }}</div>
+    {% empty %}
+    <div class="comment_header">No comments.</div>
+    {% endfor %}
+    {% endspaceless %}
+    <br/>
+    <br/>
+    {% if is_paginated or page_obj.has_other_pages %}
+    <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1#comment_section">&laquo; First</a>&nbsp;&nbsp;
+            <a href="?page={{ page_obj.previous_page_number }}#comment_section">Previous</a>&nbsp;&nbsp;
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}&nbsp;&nbsp;
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}#comment_section">Next</a>&nbsp;&nbsp;
+            <a href="?page={{ page_obj.paginator.num_pages }}#comment_section">Last &raquo;</a>
+        {% endif %}
+    </span>
+    </div>
+    {% endif %}
+</div>

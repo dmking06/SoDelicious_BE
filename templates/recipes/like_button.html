@@ -1,0 +1,36 @@
+<div class="like_section">
+    <h4>Likes: <span id="likes_count">{{ product.likes.count }}</span></h4>
+    <div>
+        {% if user.is_authenticated %}
+        <a id="{{ product.id }}" class="like_icon" style="color: {{ like_color }};">
+            <i class="fa fa-thumbs-up" aria-hidden="true" title="Like this product!"></i>
+        </a>
+        {% else %}
+        <button class="button1" onclick="window.location.href='{% url 'accounts:login' %}'">
+            Login to like this product!
+        </button>
+        {% endif %}
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+// AJAX CALL
+$('.like_icon').click(function(){
+    $.ajax({
+             type: "POST",
+             url: "{% url 'products:like' %}",
+             data: {'likes_id': $(this).attr('id'),
+                    'operation':'like_submit',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+             },
+             dataType: "json",
+             success: function(response) {
+                selector = document.getElementById(response.likes_id);
+                $(selector).css("color", response.new_color);
+                document.getElementById('likes_count').innerHTML = response.likes_count;
+              }
+        });
+  })
+
+</script>
