@@ -47,8 +47,7 @@ def landing_page(request):
 
     for recipe in latest_recipes:
         temp = recipe.album.images.filter(default=True).first()
-        recipe.image = temp.image
-        recipe.cloud_image = temp.cloud_image.url
+        recipe.image = temp.image.url
     context = {'latest_recipes': latest_recipes}
     return render(request, 'recipes/landing_page.html', context)
 

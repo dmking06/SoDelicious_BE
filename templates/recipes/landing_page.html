@@ -95,7 +95,7 @@
         <div class="grid-item-main">
             <div class="grid-image-container">
                 <a href="{% url 'recipes:recipe' recipe.pk %}">
-                    <img src="{{ recipe.cloud_image }}" alt="{{ recipe.name }}">
+                    <img src="{{ recipe.image }}" alt="{{ recipe.name }}">
                 </a>
             </div>
             <p>{{ recipe.name|wordwrap:16|linebreaksbr }}</p>

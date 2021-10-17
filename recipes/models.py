@@ -1,10 +1,14 @@
 import decimal
+import environ
 
 from cloudinary.models import CloudinaryField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from users.models import Profile
+
+env = environ.Env()
+environ.Env.read_env()
 
 
 class ImageAlbum(models.Model):
@@ -28,15 +32,15 @@ class Image(models.Model):
     Image model
     """
     name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='recipes/', blank=True, null=True, default=None)
-    cloud_image = CloudinaryField('image',
-                                  overwrite=True,
-                                  folder="recipes/local",
-                                  resource_type="image",
-                                  use_filename=True,
-                                  unique_filename=False,
-                                  format="jpg",
-                                  default=None)
+    # image = models.ImageField(upload_to='recipes/', blank=True, null=True, default=None)
+    image = CloudinaryField('image',
+                            overwrite=True,
+                            folder=env('CLOUD_DIR'),
+                            resource_type="image",
+                            use_filename=True,
+                            unique_filename=False,
+                            format="jpg",
+                            default=None)
     submitted_by = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True)
     default = models.BooleanField(default=False)
     album = models.ForeignKey(ImageAlbum, related_name='images', on_delete=models.CASCADE)
