@@ -367,8 +367,8 @@ h1 {
 }
 
 .grid-item-main img {
-    max-width: 100%;
-    height: auto;
+    max-width: 386px;
+    height: 192px;
     transition: opacity 0.25s ease-in-out;
 }
 .grid-item-main img:hover {
