@@ -1,5 +1,6 @@
 <html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <body>
+{% include 'recipes/link_header.html' %}
 <h1 class="text-center"><strong>Update User Info</strong></h1>
 <br/>
 {% if messages %}
@@ -40,11 +41,15 @@
     {{ form.full_name.label }}
     {{ form.full_name }}
     {{ form.full_name.errors.as_text|escape }}
+
+    <br/>
+    <br/>
+    {{ form.subscribed.label }}
+    {{ form.subscribed }}
+    {{ form.subscribed.errors.as_text|escape }}
     <p><input type="submit" value="Update"></p>
     <br/>
 </form>
 
-<p><a href="{% url 'users:index' %}">Home</a></p>
-<p><a href="{% url 'users:logout' %}">Log Out</a></p>
 </body>
 </html>

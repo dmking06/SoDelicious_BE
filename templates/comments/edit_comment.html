@@ -1,0 +1,40 @@
+{% extends "accounts/accounts_base.html" %}
+{% block title %}Edit Your Comment{% endblock %}
+{% load static %}
+{% block like_css %}
+<link rel="stylesheet" href="{% static 'css/comment.css' %}">
+{% endblock like_css %}
+{% block content %}
+<div class="comment_section">
+    <div class="comment_box">
+        <h1 class="heading">Edit your comment!</h1>
+        <br/>
+        <div class="comment_form">
+            {% if user.is_authenticated %}
+            <form action="{% url 'comments:edit_comment' comment.id %}" method="POST">
+                {% csrf_token %}
+                <h3>Username: {{ comment.profile }}</h3>
+                <br/>
+                <strong>Recipe:</strong>
+                {{ comment.recipe }}
+                <br/>
+                <br/>
+                {{ form.body }}
+                <div class="form_errors">{{ form.body.errors.as_text|escape }}</div>
+                <div class="form_button">
+                    <input type="submit" name="Update" value="Update Comment">
+                    <br/>
+                    <br/>
+                    <br/>
+                    <input type="submit" name="Cancel" value="Cancel">
+                </div>
+                <br/>
+            </form>
+            {% else %}
+            <p>Login to leave feedback!</p>
+            {% endif %}
+        </div>
+    </div>
+    <br/>
+</div>
+{% endblock %}

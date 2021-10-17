@@ -4,18 +4,19 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
-from users.views import user_info_view
+from recipes.views import landing_page
 
 urlpatterns = [
                   # Admin pages
                   path('admin/', admin.site.urls),
 
                   # Homepage
-                  path('', user_info_view, name='index'),
+                  path('', landing_page, name='landing_page'),
 
                   # apps
                   path('users/', include('users.urls')),
                   path('recipes/', include('recipes.urls')),
+                  path('comments/', include('comments.urls')),
 
                   # Password reset
                   path('reset_password/',

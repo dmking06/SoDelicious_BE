@@ -38,3 +38,5 @@ class ProfileForm(forms.Form):
                              widget=forms.TextInput(attrs={'autofocus': 'True'}))
 
     full_name = forms.CharField(label='Full Name', max_length=100, required=False)
+
+    subscribed = forms.BooleanField(label='Subscribed to newsletter:', required=False)

@@ -4,50 +4,187 @@
   <meta charset="UTF-8">
   <title>Details for {{ recipe.name }}</title>
   {% load static %}
-<!--  <link rel="stylesheet" href="{% static 'students/basic.css' %}" type="text/css">-->
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      padding: 2x;
+    }
+    th, td {
+      padding: 5px;
+    }
+  </style>
 </head>
 <body>
+{% include 'recipes/link_header.html' %}
 <table>
   <tr>
     <td>Recipe</td>
-    <td> {{ recipe.name }}</td>
+    <td>{{ recipe.name }}</td>
+  </tr>
+  <tr>
+    <td>
+      <div class="like_section">
+        <h4>Faves: <span id="likes_count">{{ recipe.likes.count }}</span></h4>
+      </div>
+    </td>
+    <td>
+      <div>
+        {% if user.is_authenticated %}
+        <a id="recipe_{{ recipe.id }}" class="like_icon" style="color: {{ like_color }};">
+          <i class="fa fa-utensils fa-2x" aria-hidden="true" title="Like this product!"></i>
+        </a>
+        {% else %}
+        <button class="button1" onclick="window.location.href='{% url 'users:login' %}'">
+          Login to like this product!
+        </button>
+        {% endif %}
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>Overall Rating</td>
+    <td>
+      {% spaceless %}
+      <div>
+        {% for x in overall_rating %}
+        {% if x == 1 %}
+        <a id="{{ forloop.counter }}" class="rating_icon">
+          <i class="fa fa-star fa-2x" style="color: gold;"></i>
+        </a>
+        {% elif x == 2 %}
+        <a id="{{ forloop.counter }}" class="rating_icon">
+          <i class="fa fa-star-half fa-2x" style="color: gold;"></i>
+        </a>
+        {% elif x == 0 %}
+        <a id="{{ forloop.counter }}" class="rating_icon">
+          <i class="fa fa-star fa-2x" style="color: lightgrey;"></i>
+        </a>
+        {% endif %}
+        {% endfor %}
+      </div>
+      <p id="ratings_message">Click a star to rate this recipe!</p>
+      {% endspaceless %}
+    </td>
+  </tr>
+  {% comment %}
+  <tr>
+    <td>Your Rating</td>
+    <td>
+      <div title="Rate this product!">
+        <a id="6" class="rating_icon" style="color: {{ colors.0 }};">
+          <i class="fa fa-star fa-2x" aria-hidden="true"></i>
+        </a>
+        <a id="7" class="rating_icon" style="color: {{ colors.1 }};">
+          <i class="fa fa-star fa-2x" aria-hidden="true"></i>
+        </a>
+        <a id="8" class="rating_icon" style="color: {{ colors.2 }};">
+          <i class="fa fa-star fa-2x" aria-hidden="true"></i>
+        </a>
+        <a id="9" class="rating_icon" style="color: {{ colors.3 }};">
+          <i class="fa fa-star fa-2x" aria-hidden="true"></i>
+        </a>
+        <a id="10" class="rating_icon" style="color: {{ colors.4 }};">
+          <i class="fa fa-star fa-2x" aria-hidden="true"></i>
+        </a>
+      </div>
+    </td>
+  </tr>
+  {% endcomment %}
+  <tr>
+    <td>Category</td>
+    <td>{% for category in recipe.category.all %}<a href="{% url 'recipes:category' category.id %}">{{ category }}</a><br />{% endfor %}</td>
+  </tr>
+  <tr>
+    <td>Submitted by</td>
+    <td>{{ recipe.submitted_by }}</td>
   </tr>
   <tr>
     <td>Description</td>
-    <td> {{ recipe.description }}</td>
-  </tr>
-  <tr>
-    <td>Category</td>
-    <td> {% for category in recipe.category.all %}{{ category }}<br />{% endfor %}</td>
+    <td>{{ recipe.description }}</td>
   </tr>
   <tr>
     <td>Prep Time</td>
-    <td> {{ recipe.prep_time }}</td>
+    <td>{{ recipe.prep_time }}</td>
   </tr>
   <tr>
     <td>Cook Time</td>
-    <td> {{ recipe.cook_time }}</td>
+    <td>{{ recipe.cook_time }}</td>
   </tr>
   <tr>
     <td>Total Time</td>
-    <td> {{ recipe.total_time }}</td>
+    <td>{{ recipe.total_time }}</td>
   </tr>
   <tr>
     <td>Servings</td>
-    <td> {{ recipe.servings }}</td>
+    <td>{{ recipe.servings }}</td>
   </tr>
   <tr>
     <td>Date Created</td>
-    <td> {{ recipe.date_created }}</td>
+    <td>{{ recipe.date_created }}</td>
   </tr>
   <tr>
     <td>Ingredients</td>
-    <td> {{ recipe.ingredients }}</td>
+    <td>
+      {% for line in ingredient_lines %}{{ line }}<br />
+      {% endfor %}
+    </td>
   </tr>
   <tr>
     <td>Steps</td>
-    <td> {{ recipe.steps }}</td>
+    <td>
+      {% for line in step_lines %}{{ line }}<br />
+      {% endfor %}
+    </td>
   </tr>
 </table>
+
+{% include 'comments/comments.html' %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+// AJAX CALL
+$('.like_icon').click(function(){
+    $.ajax({
+             type: "POST",
+             url: "{% url 'recipes:like' %}",
+             data: {'likes_id': $(this).attr('id'),
+                    'recipe_id': {{ recipe.pk }},
+                    'operation':'like_submit',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+             },
+             dataType: "json",
+             success: function(response) {
+                selector = document.getElementById(response.likes_id);
+                $(selector).css("color", response.new_color);
+                document.getElementById('likes_count').innerHTML = response.likes_count;
+              }
+        });
+  })
+
+
+$('.rating_icon').click(function(){
+    $.ajax({
+             type: "POST",
+             url: "{% url 'recipes:rate' %}",
+             data: {'ratings_id': $(this).attr('id'),
+                    'recipe_pk': {{ recipe.pk }},
+                    'operation':'rating_submit',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+             },
+             dataType: "json",
+             success: function(response) {
+                console.log("success")
+                document.getElementById('ratings_message').innerHTML = "Thank you for your rating!";
+                {% comment %}
+                response.colors.forEach((color, index) => {
+                    selector = document.getElementById(index + 1);
+                    $(selector).css("color", color);
+                });
+                {% endcomment %}
+             }
+        });
+  })
+</script>
 </body>
 </html>
+

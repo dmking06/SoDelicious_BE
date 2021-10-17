@@ -47,7 +47,7 @@ def login_view(request):
             login(request, user)
 
             # redirect to Homepage:
-            return redirect('index')
+            return redirect('landing_page')
         else:
             # Display error message
             messages.error(request, "Invalid login. Please try again.")
@@ -108,7 +108,7 @@ def register_view(request):
                 # Login the user
                 login(request, user)
                 messages.success(request, f'Your account has been confirmed.')
-                return redirect('index')
+                return redirect('landing_page')
 
     # Render the form with any bound data
     context = {'form': form}
@@ -152,13 +152,13 @@ def activate_view(request, uidb64, token):
             # Login the user
             login(request, user)
             messages.success(request, f'Your account has been confirmed.')
-            return redirect('index')
+            return redirect('landing_page')
 
         # If user is not found, show error message
         else:
             messages.warning(request, 'The confirmation link was invalid, '
                                       'possibly because it has already been used.')
-            return redirect('index')
+            return redirect('landing_page')
 
 
 # Logout
@@ -178,19 +178,27 @@ def user_info_view(request):
 
     # Create form with current user info
     form = ProfileForm(initial={'email': user.email,
-                                'full_name': profile.full_name})
+                                'full_name': profile.full_name,
+                                'subscribed': profile.subscribed
+                                })
 
     # Check if request was POST
     if request.method == 'POST':
-        # Create the form using POST data
-        form = ProfileForm(request.POST, initial={'email': user.email, 'full_name': profile.full_name})
+        # Load the form using POST data
+        form = ProfileForm(request.POST,
+                           initial={'email': user.email,
+                                    'full_name': profile.full_name,
+                                    'subscribed': profile.subscribed
+                                    })
 
         # Verify form data is valid
         if form.is_valid() and form.has_changed():
+            print("valid and changed")
             # Save the updates and reload page with data
             user.email = form.cleaned_data['email']
             user.save()
             profile.full_name = form.cleaned_data['full_name']
+            profile.subscribed = form.cleaned_data['subscribed']
             profile.save()
             messages.success(request, "Updated user profile.")
             return redirect('users:user_info')

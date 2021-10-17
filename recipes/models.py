@@ -1,28 +1,21 @@
+import decimal
+
 from cloudinary.models import CloudinaryField
-from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from users.models import Profile
 
 
-def get_upload_path(instance, filename):
-    """
-    Returns the upload path for a given image
-    :param instance: Image instance
-    :param filename: name of image file
-    :return: path to image file
-    """
-    model = instance.album.model.__class__._meta
-    name = model.verbose_name_plural.replace(' ', '_')
-    pk = model.pk
-    return f'recipes/{name}_{pk}/{filename}'
-
-
 class ImageAlbum(models.Model):
     """
     Image Album model for relating many images to a recipe
     """
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
     def default(self):
         return self.images.filter(default=True).first()
 
@@ -35,7 +28,16 @@ class Image(models.Model):
     Image model
     """
     name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to=get_upload_path)
+    image = models.ImageField(upload_to='recipes/', blank=True, null=True, default=None)
+    cloud_image = CloudinaryField('image',
+                                  overwrite=True,
+                                  folder="recipes/local",
+                                  resource_type="image",
+                                  use_filename=True,
+                                  unique_filename=False,
+                                  format="jpg",
+                                  default=None)
+    submitted_by = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True)
     default = models.BooleanField(default=False)
     album = models.ForeignKey(ImageAlbum, related_name='images', on_delete=models.CASCADE)
 
@@ -51,8 +53,8 @@ class Category(models.Model):
 
 
 class Recipe(models.Model):
-    name = models.CharField(max_length=200)
-    submitted_by = models.ForeignKey(Profile, on_delete=models.CASCADE, default=None)
+    name = models.CharField(max_length=200, unique=True)
+    submitted_by = models.ForeignKey(Profile, on_delete=models.CASCADE, default=None, null=True)
     category = models.ManyToManyField(Category, blank=True, default=None)
     description = models.TextField(blank=True, null=True, default=None)
     prep_time = models.IntegerField(blank=True, null=True, default=None)
@@ -62,17 +64,27 @@ class Recipe(models.Model):
     likes = models.ManyToManyField(Profile, blank=True, related_name="likes")
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now_add=True, blank=True)
-    ingredients = models.TextField(blank=True, null=True, default=None)
-    steps = models.TextField(blank=True, null=True, default=None)
+    ingredients = models.TextField(blank=True, default=None)
+    steps = models.TextField(blank=True, default=None)
     nutrition = models.TextField(blank=True, null=True, default=None)
-    album = models.OneToOneField(ImageAlbum, related_name='model', on_delete=models.CASCADE)
+    album = models.OneToOneField(ImageAlbum, related_name='recipe', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
+    def get_avg_rating(self):
+        ratings = Rating.objects.filter(recipe=self)
+        count = len(ratings)
+        total = 0
+        for rating in ratings:
+            total += rating.rating
+        return decimal.Decimal(total / count)
+
 
 class Rating(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='ratings')
-    rating = models.DecimalField(max_digits=2, decimal_places=1, blank=True,
-                                 default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
+    rating = models.IntegerField(default=0, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.profile} rates {self.recipe} a {self.rating}/5"

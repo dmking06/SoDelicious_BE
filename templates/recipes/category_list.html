@@ -7,7 +7,12 @@
 <!--  <link rel="stylesheet" href="{% static 'students/basic.css' %}" type="text/css">-->
 </head>
 <body>
+{% include 'recipes/link_header.html' %}
 <h3>Category List:</h3>
+<ul>
+  <li><a href="{% url 'recipes:recipe_list' %}">Show all recipes</a>
+  </li>
+</ul>
 {% if category_list %}
 <ul>
   {% for category in category_list %}

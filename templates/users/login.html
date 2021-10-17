@@ -1,5 +1,6 @@
 <html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <body>
+{% include 'recipes/link_header.html' %}
 <h1 class="text-center"><strong>Login</strong></h1>
 <br/>
 {% if messages %}
@@ -43,6 +44,5 @@
 <br/>
 <p><a href="{% url 'reset_password' %}">Forgot your password?</a></p>
 <p>Not registered? <a href="{% url 'users:register' %}">Sign up!</a></p>
-<p><a href="{% url 'users:index' %}">Home</a></p>
 </body>
 </html>

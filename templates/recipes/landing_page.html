@@ -1,31 +1,139 @@
-{% extends "accounts/accounts_base.html" %}
-{% block title %}CompareX - Price Comparison app{% endblock %}
-{% load static %}
-{% block like_css %}
-<link rel="stylesheet" href="{% static 'css/landing_page.css' %}">
-{% endblock like_css %}
-{% block content %}
-<main>
-    <div id="main-photo"></div>
-    <div class="box-right">
-        <div class="logo2">
-            <img src="{% static 'images/icon-logoBlack.svg' %}" alt="logo">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/Landing-page.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <title>SoDelicious</title>
+    <link rel="icon" href="{% static 'images/landing-page-images/SD.svg' %}">
+</head>
+<body>
+<div class="page-container">
+    <div class="header">
+        <!-- (A) MENU WRAPPER -->
+        <nav id="hamnav">
+            <!-- (B) THE HAMBURGER -->
+            <input type="checkbox" id="checkbox1" class="checkbox1 visuallyHidden">
+            <label for="checkbox1">
+                <div class="hamburger hamburger1">
+                    <span class="bar bar1"></span>
+                    <span class="bar bar2"></span>
+                    <span class="bar bar3"></span>
+                    <span class="bar bar4"></span>
+                </div>
+            </label>
+
+            <!-- (C) MENU ITEMS -->
+            <div id="hamitems">
+                <a href="{% url 'recipes:recipe_list' %}">Recipes</a>
+                <a href="About-us.html">About Us</a>
+                <a href="Highly-rec-page.html">Must See</a>
+<!--                <a href="Restaurants-page.html">Find a Restaurant</a>-->
+                <a href="Contact-us-page.html">Contact Us</a>
+
+                <div class="subscribe">
+                    <label for="email-sub">Subscribe to our newsletter</label>
+                    <input type="email" placeholder="Enter email here" name="email-sub">
+                    <input type="submit" value="submit">
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="logo">
+            <img src="{% static 'images/landing-page-images/So-Delicious.png' %}">
         </div>
 
-        <div class="main-text">
-            <h1>Compare prices from the internet's top retailers.</h1>
-            <p>Get the best deal on thousands of products. <br>
-                Sign up now to save your searches! </p>
+        <div class="right-links">
+            {% if not user.is_authenticated %}
+            <a href="{% url 'users:login' %}">Log In</a>
+            {% elif user.is_authenticated %}
+            <a href="{% url 'users:logout' %}">Logout</a>
+            {% endif %}
+            <a href="Subscribe-page.html">Subscribe</a>
+            <!-- <a href="#" class="openBtn" onclick="openSearch()"><img src="Images/landing-page-images/search.svg"></a> -->
         </div>
 
-        <div class="buttons">
-            <button class="button1" onclick="window.location.href='{% url 'accounts:register' %}'">
-                Sign up now for Free!
-            </button>
-            <button class="button2" onclick="window.location.href='{% url 'products:product_list' %}'">
-                Browse Products
-            </button>
-        </div>
+        <!-- <div id="myOverlay" class="overlay">
+            <span class="closebtn" onclick="closeSearch()" title="Close Overlay">×</span>
+            <div class="overlay-content">
+              <form action="/action_page.php">
+                <input type="text" placeholder="What are you craving?" name="search">
+                <button type="submit"><img src="Images/landing-page-images/search.svg"></button>
+              </form>
+            </div>
+          </div> -->
     </div>
-</main>
-{% endblock %}}
+
+
+    <form action="{% url 'recipes:search_results' %}" method="get">
+        <div class="search">
+            <input name="keyword" type="text" placeholder="What are you craving?">
+            <button class="search_icon" type="submit">
+                <img src="{% static 'images/landing-page-images/search.svg' %}">
+            </button>
+        </div>
+    </form>
+
+    <div class="social-icons">
+        <a href="https://www.facebook.com/" id="fb"><img src="{% static 'images/landing-page-images/fb-icon.svg' %}"></a>
+        <a href="https://www.instagram.com/" id="ig"><img src="{% static 'images/landing-page-images/instagram.svg' %}"></a>
+        <a href="https://www.linkedin.com/" id="li"><img src="{% static 'images/landing-page-images/linkedin.svg' %}"></a>
+        <a href="https://twitter.com/" id="tw"><img src="{% static 'images/landing-page-images/twitter.svg' %}"></a>
+        <a href="https://www.youtube.com/" id="yt"><img src="{% static 'images/landing-page-images/youtube.svg' %}"></a>
+    </div>
+
+    <div class="recipes"><h1>Recipes</h1></div>
+    <div class="grid-container-main">
+
+        {% for recipe in latest_recipes %}
+        <div class="grid-item-main">
+            <div class="grid-image-container">
+                <a href="{% url 'recipes:recipe' recipe.pk %}">
+                    <img src="{{ recipe.cloud_image }}" alt="{{ recipe.name }}">
+                </a>
+            </div>
+            <p>{{ recipe.name|wordwrap:16|linebreaksbr }}</p>
+        </div>
+        {% empty %}
+        <div class="recipes"><h3>Come back soon for some great recipes!</h3></div>
+        {% endfor recipe %}
+    </div>
+    <svg id="svg">
+        <defs>
+            <filter id="colorFilter">
+                <feColorMatrix
+                        color-interpolation-filters="sRGB"
+                        type="matrix"
+                        values="0.46 0   0   0   0
+                0   0.46  0   0   0
+                0   0   0.46  0   0
+                0   0   0   1   0 "/>
+            </filter>
+        </defs>
+    </svg>
+    <footer>
+        <p>Company © SoDelicious. All rights reserved.</p>
+    </footer>
+</div>
+
+
+<!-- <script>
+    function openSearch() {
+      document.getElementById("myOverlay").style.display = "block";
+    }
+
+    function closeSearch() {
+      document.getElementById("myOverlay").style.display = "none";
+    }
+    </script> -->
+
+</body>
+
+
+</html>

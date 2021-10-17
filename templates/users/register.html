@@ -1,5 +1,6 @@
 <html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <body>
+{% include 'recipes/link_header.html' %}
 <h1 class="text-center"><strong>Register</strong></h1>
 <br/>
 {% if messages %}
@@ -59,6 +60,5 @@
     <br/>
 </form>
 <p>Already registered? <a href="{% url 'users:login' %}">Log In!</a></p>
-<p><a href="{% url 'users:index' %}">Home</a></p>
 </body>
 </html>

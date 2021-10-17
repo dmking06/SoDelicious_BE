@@ -70,6 +70,7 @@ class User(AbstractUser):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
     full_name = models.CharField(max_length=100, blank=True, default="")
+    subscribed = models.BooleanField(default=False)
 
     def __str__(self):
         if self.full_name == "" or self.full_name is None:

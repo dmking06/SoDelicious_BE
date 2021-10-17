@@ -1,0 +1,19 @@
+<a href="{% url 'landing_page' %}">Home</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="{% url 'recipes:category_list' %}">Categories</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="{% url 'recipes:recipe_list' %}">All Recipes</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{% if not user.is_authenticated %}
+<a href="{% url 'users:login' %}">Sign In!</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="{% url 'users:register' %}">Sign Up!</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{% elif user.is_authenticated %}
+<a href="{% url 'users:user_info' %}">User Info</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="{% url 'users:logout' %}">Log Out!</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{% endif %}
+<br />
+<br />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
+<form action="{% url 'recipes:search_results' %}" method="get">
+    <input name="keyword" type="text" placeholder="Search...">
+    <button type="submit"><i class="fa fa-search"></i></button>
+</form>
+<br />
+<br />

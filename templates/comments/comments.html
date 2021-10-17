@@ -1,0 +1,32 @@
+{% load static %}
+{% block like_css %}
+<link rel="stylesheet" href="{% static 'css/comment.css' %}">
+{% endblock like_css %}
+<div class="comment_section" id="comment_section">
+    <h2>Comments:&nbsp&nbsp{{ page_obj.paginator.count }}</h2>
+    <br/>
+    <div class="comment_box">
+        <h1>Leave a comment!</h1>
+        <div class="comment_form">
+            {% if user.is_authenticated %}
+            <form action="{% url 'comments:create_comment' recipe.id %}" method="POST" id="submitform">
+                {% csrf_token %}
+                <br/>
+                <textarea id="comment_body" name="comment_body" rows="4"
+                          cols="50" placeholder="We appreciate your feedback!"></textarea>
+
+                <div class="form_button">
+                    <input type="submit" value="Submit Comment">
+                </div>
+            </form>
+            {% else %}
+            <div class="form_button">
+                <input type="submit" value="Login to leave feedback!"
+                       onclick="window.location.href='{% url 'users:login' %}'">
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <br/>
+    {% include "comments/comment_list.html" %}
+</div>

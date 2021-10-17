@@ -9,6 +9,6 @@ def approve_comments(request, queryset):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'recipe', 'created_on', 'edited')
-    list_filter = ('user', 'recipe', 'created_on')
-    search_fields = ('user', 'recipe', 'body')
+    list_display = ('profile', 'recipe', 'created_on', 'edited')
+    list_filter = ('profile', 'recipe', 'created_on')
+    search_fields = ('profile', 'recipe', 'body')

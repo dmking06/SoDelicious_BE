@@ -9,6 +9,7 @@ from django.views import generic
 from recipes.models import Recipe
 from .forms import EditCommentForm
 from .models import Comment
+from users.models import Profile
 
 # Items per page
 ipp = 10
@@ -22,17 +23,16 @@ class MyCommentsView(generic.ListView):
     context_object_name = 'comments_list'
 
     def get_queryset(self):
-        return Comment.objects.filter(user=self.request.user)
+        return Comment.objects.filter(profile=Profile.objects.get(user=self.request.user))
 
 
 # Create a comment
 @login_required(login_url="users:login")
 def create_comment(request, recipe_id):
     if request.method == 'POST':
-        Comment.objects.create(user=request.user,
+        Comment.objects.create(profile=Profile.objects.get(user=request.user),
                                recipe=Recipe.objects.get(pk=recipe_id),
-                               body=request.POST['comment_body'],
-                               active=True)
+                               body=request.POST['comment_body'])
     return redirect('recipes:recipe', pk=recipe_id)
 
 
@@ -42,8 +42,11 @@ def edit_comment(request, comment_id):
     # Try to get the comment
     comment = get_object_or_404(Comment, pk=comment_id)
 
+    # Get user profile
+    profile = Profile.objects.get(user=request.user)
+
     # Check if current user created the comment
-    if request.user == comment.user:
+    if profile == comment.profile:
         # Create form with comment info
         form = EditCommentForm(instance=comment)
 
@@ -80,8 +83,11 @@ def delete_comment(request, comment_id):
     redirect_url = request.META["HTTP_REFERER"]
     comment = get_object_or_404(Comment, pk=comment_id)
 
+    # Get user profile
+    profile = Profile.objects.get(user=request.user)
+
     # Check if current user created the comment
-    if request.user == comment.user:
+    if profile == comment.profile:
         # Delete comment
         comment.delete()
         return redirect(redirect_url)

@@ -1,14 +1,27 @@
 from django.urls import path
 
-from .views import RecipeDetailView, RecipeListView, liked_recipes_view, like_button
+from .views import RecipeDetailView, CategoryDetailView, RecipeListView, CategoryListView, liked_recipes_view, \
+    like_button, rating_button, SearchResultsView
 
 app_name = 'recipes'
 urlpatterns = [
-    # Recipe list
-    path('', RecipeListView.as_view(), name='recipe_list'),
+    # Search
+    path('search/', SearchResultsView.as_view(), name='search_results'),
 
-    # Recipe details & modal
+    # Category list
+    path('', CategoryListView.as_view(), name='category_list'),
+
+    # Category details
+    path('category/<int:pk>/', CategoryDetailView.as_view(), name='category'),
+
+    # Recipe list
+    path('list', RecipeListView.as_view(), name='recipe_list'),
+
+    # Recipe details
     path('<int:pk>/', RecipeDetailView.as_view(), name='recipe'),
+
+    # Rating
+    path('rating/', rating_button, name='rate'),
 
     # Likes
     path('like/', like_button, name='like'),
