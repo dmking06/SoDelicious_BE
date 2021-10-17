@@ -95,7 +95,11 @@
         <div class="grid-item-main">
             <div class="grid-image-container">
                 <a href="{% url 'recipes:recipe' recipe.pk %}">
+                    {% if not recipe.image %}
+                    <img src="{% static 'images/recipes/image_not_found.png' %}">
+                    {% else %}
                     <img src="{{ recipe.image }}" alt="{{ recipe.name }}">
+                    {% endif %}
                 </a>
             </div>
             <p>{{ recipe.name|wordwrap:16|linebreaksbr }}</p>
