@@ -184,6 +184,7 @@ input[type="submit"] {
 .logo {
     padding-left: 89px;
 }*/
+/*
 
 .search {
     display: flex;
@@ -195,12 +196,14 @@ input[type="submit"] {
 input[type="text"] {
     width: 400px;
     height: 50px;
-    /* left: 376px;
-top: 90px; */
+    */
+/* left: 376px;
+top: 90px; *//*
+
     font-size: 16px;
     text-indent: 5%;
     background: transparent;
-    background-image: url("images/landing-page-images/search.svg");
+    background-image: url("../images/landing-page-images/search.svg");
     background-repeat: no-repeat;
     background-position: 95% 50%;
     border: 1px solid rgba(0, 0, 0, 0.15);
@@ -213,6 +216,7 @@ input[type="text"]:focus {
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
     transform: scale(1.04)
 }
+*/
 
 /*.social-icons {
     display: flex;
