@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Search Results:</title>
+  {% load static %}
+</head>
+<body>
+{% include 'recipes/link_header.html' %}
+<h3>Search Results for "{{ request.GET.keyword }}":</h3>
+{% if recipe_list %}
+<ul>
+  {% for recipe in recipe_list %}
+  <li><a href="{% url 'recipes:recipe' recipe.id %}">{{ recipe.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No results were found.</p>
+{% endif %}
+</body>
+</html>

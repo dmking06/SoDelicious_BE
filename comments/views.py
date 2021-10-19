@@ -90,6 +90,7 @@ def delete_comment(request, comment_id):
     if profile == comment.profile:
         # Delete comment
         comment.delete()
+        messages.error(request, f'Your comment has been deleted.')
         return redirect(redirect_url)
     else:
         messages.error(request, f'You are not authorized to perform that action.')

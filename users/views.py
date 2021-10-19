@@ -200,7 +200,7 @@ def user_info_view(request):
             profile.full_name = form.cleaned_data['full_name']
             profile.subscribed = form.cleaned_data['subscribed']
             profile.save()
-            messages.success(request, "Updated user profile.")
+            # messages.success(request, "Updated user profile.")
             return redirect('users:user_info')
 
     # Render the form with any bound data

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/Highly-rec-page.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recipe_header.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <title>Highly Recommended</title>
+    <link rel="icon" href="{% static 'images/landing-page-images/SD.svg' %}">
+</head>
+<body>
+<div class="page-container">
+    {% include 'recipes/recipe_header.html' %}
+    <div class="blurb">
+        <h1>HIGHLY RECOMMENDED</h1>
+        <br>
+        <h3 id="blurb">Hi! Thank you for checking out our weekly recommended recipes and restaurants.
+            Please feel free to log in and leave a rating or comment on the recipes and restaurants.</h3>
+    </div>
+    <br />
+    <br />
+    <div class="food">
+        <div class="recipe">
+            <a href="{% url 'recipes:recipe' recipe.pk %}">
+                <img class="food-image" src="{{ recipe_image }}" alt="{{ recipe.name }}">
+            </a>
+            <div>
+                <h1 id="recipe">RECIPE <br> OF <br> THE WEEK </h1>
+                <a href="{% url 'recipes:recipe' recipe.pk %}">
+                    <h3 id="recipe-name">{{ recipe.name|wordwrap:16|linebreaksbr }}</h3>
+                </a>
+            </div>
+        </div>
+        <br>
+    </div>
+
+    <div class="bottom">
+        <div class="blurb2">
+            <img src="{% static 'images/Highly-rec-images/So Delicious.png' %}" alt="so delicious logo" id="logo">
+            <p id="rec">Recipes you want to make.<br />Cooking advice that works.</p>
+        </div>
+        {% include 'recipes/recipe_footer.html' %}
+    </div>
+</div>
+</body>
+</html>

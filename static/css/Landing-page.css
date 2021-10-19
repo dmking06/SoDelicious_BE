@@ -17,171 +17,6 @@ html, body {
     height: 100%;
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-    background-color: #b1d8b7;
-   
-}
-
-#hamnav {
-    position:relative;
-  
-}
-#hamitems {
-    border: 2px solid;
-    background-color: white;
-    position: absolute;
-    width: 300px;
-    left: 0;
-    top: 100%;
-    z-index: 1;
-    text-align: center;
-}
-
- /* HAMBURGER MENU: (A) BREAK INTO VERTICAL MENU */
- #hamitems a {
-    box-sizing: border-box;
-    display: block;
-    border: none;
-    text-decoration: none;
-    color: black;
-    font-size: 18px;
-    font-weight: 700;
-    margin-top: 15%;
-  }
-
- /* (B) ANIMATE HAMBURGER MENU */
-  .hamburger {
-    display: inline-block;
-    margin: 0 auto;
-    margin-top: 30px;
-    margin-left: 50%;
-    width: 20px;
-    height: 16px;
-    position: relative;
-    cursor: pointer;
-}
-
-.hamburger .bar {
-    padding: 0;
-    width: 20px;
-    height: 2px;
-    background-color: black;
-    display: block;
-    border-radius: 4px;
-    transition: all 0.4s ease-in-out;
-    position: absolute; 
-}
-
-.bar1 {
-    top: 0;
-}
-
-.bar2,
-.bar3 {
-    top: 7px;
-}
-
-.bar3 {
-    right: 0;
-}
-
-.bar4 {
-    bottom: 0;
-}
-
-  .checkbox1:checked + label > .hamburger1 > .bar1{
-    transform: rotate(45deg);
-    transform-origin: 5%;
-    width: 22px
-}
-
-.checkbox1:checked + label > .hamburger1 > .bar2 {
-    transform: translateX(-40px);
-    background-color: transparent;
-}
-
-.checkbox1:checked + label > .hamburger1 > .bar3 {
-    transform: translateX(40px);
-    background-color: transparent;
-}
-
-.checkbox1:checked + label > .hamburger1 > .bar4 {
-    transform-origin: 5%;
-    transform: rotate(-45deg);
-    width: 22px;
-}
-
-
-  /* (C) TOGGLE SHOW/HIDE MENU */
-  #hamitems { display: none; }
-  #hamnav input:checked ~ #hamitems { display: block; }
-  #checkbox1 {display: none;}
-
-.subscribe {
-    margin-top: 20%;
-    border-top: 2px solid rgba(0, 0, 0, 0.15);
-}
-
-label {
-    display: inline-block;
-    margin-top: 10%;
-}
-
-input[type="email"] {
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 50px;
-    font-size: 14px;
-    text-indent: 5%;
-    margin-top: 10px;
-    width: 75%;
-    height: 40px;
-    margin-bottom: 20px;
-    
-}
-
-input[type="email"]:focus {
-    outline: none;
-}
-input[type="submit"] {
-    border: 0;
-    border-radius: 50px;
-    font-size: 14px;
-    margin-top: 10px;
-    height: 40px;
-    margin-bottom: 20px;
-    background-color: black;
-    color: white;
-    margin-left: -50px;
-    width: 25%;
-    height: 40px;
-    cursor: pointer;
-
-}
-
-.right-links {
-    margin-right: 2%;
-    margin-top: 1%;
-}
-.right-links a {
-    text-decoration: none;
-    color: black;
-    font-size: 14px;
-    padding-left: 8px;
-    
-}
-
-.logo {
-    padding-left: 89px;
-}
-.logo img {
-    width: 100%;
-    height: auto;
-}
-
 /* .openBtn {
     background: transparent;
     border: none;
@@ -309,7 +144,7 @@ input[type="text"]:focus {
 }
 
 .social-icons a {
-    padding-right: 2%;
+    padding: 0 2%;
 }
 
 #fb:hover{
@@ -384,6 +219,13 @@ h1 {
     width: -webkit-fit-content;
 }
 
+.grid-container-main a {
+    font-size: 18px;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
 footer {
    position: relative;
    left: 0;
@@ -401,32 +243,31 @@ footer {
  
 /* MOBILE */
 /* MOBILE */
-@media screen and (max-device-width: 810px)  {
+@media screen and (max-device-width: 810px) {
 
-.logo {
-        padding-left: 45px;
+    .grid-container-main {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-gap: 5rem;
+        justify-items: center;
+        margin: 0;
+        padding: 0;
     }
 
-.grid-container-main { 
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    grid-gap: 5rem;
-    justify-items: center;
-    margin: 0;
-    padding: 0;
-    
-} 
+    .grid-item-main {
+        display: unset;
+        width: unset;
+        padding: 20px;
+        text-align: center;
+      }
 
-.grid-item-main {
-    display: unset;
-    width: unset;
-    padding: 20px;
-    text-align: center;
-  }
-
-.grid-item-main p {
-    width: unset;
-
+    .grid-item-main p {
+        width: unset;
+    }
 }
 
+@media screen and (max-device-width: 430px) {
+    .search_icon {
+        visibility: hidden;
+    }
 }

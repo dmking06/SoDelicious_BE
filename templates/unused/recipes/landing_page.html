@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/Landing-page.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recipe_header.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <title>SoDelicious</title>
+    <link rel="icon" href="{% static 'images/landing-page-images/SD.svg' %}">
+</head>
+<body>
+<div class="page-container">
+
+    {% include 'recipes/recipe_header.html' %}
+
+    <form action="{% url 'recipes:search_results' %}" method="get">
+        <div class="search">
+            <input name="keyword" type="text" placeholder="What are you craving?">
+            <button class="search_icon" type="submit">
+                <img src="{% static 'images/landing-page-images/search.svg' %}">
+            </button>
+        </div>
+    </form>
+
+    <div class="social-icons">
+        <a href="https://www.facebook.com/" id="fb"><img src="{% static 'images/landing-page-images/fb-icon.svg' %}"></a>
+        <a href="https://www.instagram.com/" id="ig"><img src="{% static 'images/landing-page-images/instagram.svg' %}"></a>
+        <a href="https://www.linkedin.com/" id="li"><img src="{% static 'images/landing-page-images/linkedin.svg' %}"></a>
+        <a href="https://twitter.com/" id="tw"><img src="{% static 'images/landing-page-images/twitter.svg' %}"></a>
+        <a href="https://www.youtube.com/" id="yt"><img src="{% static 'images/landing-page-images/youtube.svg' %}"></a>
+    </div>
+
+    <div class="recipes"><h1>Newest Recipes</h1></div>
+    <div class="grid-container-main">
+
+        {% for recipe in latest_recipes %}
+        <div class="grid-item-main">
+            <div class="grid-image-container">
+                <a href="{% url 'recipes:recipe' recipe.pk %}">
+                    {% if not recipe.image %}
+                    <img src="{% static 'images/recipes/image_not_found.png' %}">
+                    {% else %}
+                    <img src="{{ recipe.image }}" alt="{{ recipe.name }}">
+                    {% endif %}
+                </a>
+            </div>
+            <p>{{ recipe.name|wordwrap:16|linebreaksbr }}</p>
+        </div>
+        {% empty %}
+        <div class="recipes"><h3>Come back soon for some great recipes!</h3></div>
+        {% endfor recipe %}
+    </div>
+    <svg id="svg">
+        <defs>
+            <filter id="colorFilter">
+                <feColorMatrix
+                        color-interpolation-filters="sRGB"
+                        type="matrix"
+                        values="0.46 0   0   0   0
+                0   0.46  0   0   0
+                0   0   0.46  0   0
+                0   0   0   1   0 "/>
+            </filter>
+        </defs>
+    </svg>
+    <footer>
+        <p>Company © SoDelicious. All rights reserved.</p>
+    </footer>
+</div>
+
+
+<!-- <script>
+    function openSearch() {
+      document.getElementById("myOverlay").style.display = "block";
+    }
+
+    function closeSearch() {
+      document.getElementById("myOverlay").style.display = "none";
+    }
+    </script> -->
+
+</body>
+</html>

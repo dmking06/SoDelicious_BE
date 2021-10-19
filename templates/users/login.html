@@ -1,48 +1,67 @@
-<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
-<body>
-{% include 'recipes/link_header.html' %}
-<h1 class="text-center"><strong>Login</strong></h1>
-<br/>
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-<form action="{% url 'users:login' %}" method="POST">
-    {% csrf_token %}
-    <!--    <div>-->
-    <!--        {% if form.errors %}-->
-    <!--            {% for field in form %}-->
-    <!--                {% for error in field.errors %}-->
-    <!--                <div class="alert alert-danger">-->
-    <!--                    <strong>{{field.label}}: {{ error|escape }}</strong>-->
-    <!--                </div>-->
-    <!--                {% endfor %}-->
-    <!--            {% endfor %}-->
-    <!--            {% for error in form.non_field_errors %}-->
-    <!--                <div class="alert alert-danger">-->
-    <!--                    <strong>{{ error|escape }}</strong>-->
-    <!--                </div>-->
-    <!--            {% endfor %}-->
-    <!--        {% endif %}-->
-    <!--    </div>-->
-    <!--    <br/>-->
-    <br/>
-    {{ form.email.label }}
-    {{ form.email }}
-    {{ form.email.errors.as_text|escape }}
 
-    <br/>
-    <br/>
-    {{ form.password.label }}
-    {{ form.password }}
-    {{ form.password.errors.as_text|escape }}
-    <p><input type="submit" value="Log In"></p>
-</form>
-<br/>
-<p><a href="{% url 'reset_password' %}">Forgot your password?</a></p>
-<p>Not registered? <a href="{% url 'users:register' %}">Sign up!</a></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/sign-in.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recipe_header.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <title>Home</title>
+    <link rel="icon" href="{% static 'images/landing-page-images/SD.svg' %}">
+</head>
+<body>
+<div class="page-container">
+
+    {% include 'recipes/recipe_header.html' %}
+
+    <div class="main">
+        <div class="SITYA">
+            <h1>Sign in to your account</h1>
+        </div>
+
+        <div class="need-account">
+            <p>Need an account? <a class="link" href="{% url 'users:register' %}">Create one.</a></p>
+        </div>
+
+        <div class="search-bubbles">
+            <form action="{% url 'users:login' %}" method="post">
+                {% csrf_token %}
+                <b><label class="email-label" for="email"> Email</label></b>
+                <br />
+                <input id="email" name="email" class="email-bubble" type="email" placeholder="Enter Email Address">
+                <br />
+                <br />
+                <b> <label class="pw-label" for="password"> Password</label> </b>
+                <br />
+                <input id="password" name="password" class="pw-bubble" type="Password" placeholder="Password">
+                <br />
+                <br />
+                <div class="keep_forgot">
+                    <label class="keep">
+                        <input type="checkbox" name="key" value="value" />
+                        <span>Stay signed in</span>
+                    </label>
+                    <a class="link forgot-pass" href="{% url 'reset_password' %}">Forgot Password?</a>
+                </div>
+                <br />
+                <br />
+                <input class="SI" type="submit" value="SIGN IN">
+            </form>
+        </div>
+    </div>
+
+    <div class="bottom">
+        <div class="blurb2">
+            <img src="{% static 'images/Highly-rec-images/So Delicious.png' %}" alt="so delicious logo" id="logo">
+            <p id="rec">Recipes you want to make.<br />Cooking advice that works.</p>
+        </div>
+        {% include 'recipes/recipe_footer.html' %}
+    </div>
+</div>
 </body>
 </html>

@@ -1,0 +1,416 @@
+ :root{
+     --icon-size:18px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0%;
+}
+
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+    width: 100%;
+    height: 100%;
+}
+
+.page-container {
+    width: 100%;
+    height: 100%;
+}
+
+/*
+
+.header {
+    display: flex;
+    justify-content: space-between;
+     background-color:#b1d8b7; 
+    align-items: center; 
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    
+}
+
+#hamnav {
+    position:relative;
+  
+}
+
+#hamitems {
+    border: 2px solid;
+    background-color: white;
+    position: absolute;
+    width: 300px;
+    left: 0;
+    top: 100%;
+    z-index: 1;
+    text-align: center;
+}
+
+ */
+/* HAMBURGER MENU: (A) BREAK INTO VERTICAL MENU *//*
+
+ #hamitems a {
+    box-sizing: border-box;
+    display: block;
+    border: none;
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 15%;
+  }
+
+ */
+/* (B) ANIMATE HAMBURGER MENU *//*
+
+  .hamburger {
+    display: inline-block;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-left: 50%;
+    width: 20px;
+    height: 16px;
+    position: relative;
+    cursor: pointer;
+}
+
+.hamburger .bar {
+    padding: 0;
+    width: 20px;
+    height: 2px;
+    background-color: black;
+    display: block;
+    border-radius: 4px;
+    transition: all 0.4s ease-in-out;
+    position: absolute; 
+}
+
+.bar1 {
+    top: 0;
+}
+
+.bar2,
+.bar3 {
+    top: 7px;
+}
+
+.bar3 {
+    right: 0;
+}
+
+.bar4 {
+    bottom: 0;
+}
+
+  .checkbox1:checked + label > .hamburger1 > .bar1{
+    transform: rotate(45deg);
+    transform-origin: 5%;
+    width: 22px
+}
+
+.checkbox1:checked + label > .hamburger1 > .bar2 {
+    transform: translateX(-40px);
+    background-color: transparent;
+}
+
+.checkbox1:checked + label > .hamburger1 > .bar3 {
+    transform: translateX(40px);
+    background-color: transparent;
+}
+
+.checkbox1:checked + label > .hamburger1 > .bar4 {
+    transform-origin: 5%;
+    transform: rotate(-45deg);
+    width: 22px;
+}
+
+
+  */
+/* (C) TOGGLE SHOW/HIDE MENU *//*
+
+  #hamitems { display: none; }
+  #hamnav input:checked ~ #hamitems { display: block; }
+  #checkbox1 {display: none;}
+
+  .subscribe {
+    margin-top: 20%;
+    border-top: 2px solid rgba(0, 0, 0, 0.15);
+}
+
+label {
+    display: inline-block;
+    margin-top: 10%;
+}
+
+input[type="email"] {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 50px;
+    font-size: 14px;
+    text-indent: 5%;
+    margin-top: 10px;
+    width: 75%;
+    height: 40px;
+    margin-bottom: 20px;
+    
+}
+
+input[type="email"]:focus {
+    outline: none;
+}
+
+.email_submit{
+    border: 0;
+    border-radius: 50px;
+    font-size: 14px;
+    margin-top: 10px;
+    height: 40px;
+    margin-bottom: 20px;
+    background-color: black;
+    color: white;
+    margin-left: -50px;
+    width: 25%;
+    height: 40px;
+    cursor: pointer;
+}
+
+.right-links {
+    margin-right: 2%;
+    margin-top: 1%;
+}
+.right-links a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    padding-left: 8px;
+}
+*/
+
+ .share-logo {
+top: 200px;
+left: 20px;
+  }
+
+  h1 {
+      font-size: 20px;
+  }
+
+.content {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin: 30px auto;
+}
+
+.leftside {
+    text-align: center;
+    width: 30%;
+    margin: 0 5% 0 5%;
+}
+
+.right-side {
+    width: 55%;
+    margin: 0;
+}
+
+.recipe_category h1 {
+    font-size: 28px;
+}
+
+.recipe_name {
+    text-align: center;
+    margin: 0 0 5px 0;
+}
+
+.starbox {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.starbox a {
+    margin: 5px 12px;
+    cursor: pointer;
+}
+
+#ratings_message {
+    font-size: 12px;
+}
+
+.PCS {
+    margin: 0px 0px;
+}
+
+.Ing-Inst {
+    margin: 10px 0px;
+}
+
+.steps {
+    margin: 30px 0px;
+}
+
+.step_container {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin: 20px 0px;
+}
+
+.step_num {
+    width: 4em;
+}
+
+.step {
+    width: 100%;
+}
+
+.nutrition-facts {
+    margin: 10px 0px;
+/*    position: absolute;
+    left: 550px;
+    top: 410px;*/
+}
+
+.RecipePic img{
+    max-width: 400px;
+    max-height: 400px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin: 20px auto;
+}
+
+  
+/* button {
+    color: #fff!important;
+    background-color: #ac7e8f;
+    border: 1px solid transparent;
+    border-radius: 30px;
+    padding: 8px 30px;
+    font-size: 14px;
+    position: absolute;
+    top: 650px;
+    left: 250px;
+    
+} */
+
+textarea {
+    background-color: transparent;
+    outline: none;
+    width: 100%;
+}
+
+.comment_section {
+    margin-top: 20px;
+}
+
+.comment_submit {
+    color: #fff!important;
+    background-color: #b1d8b7;
+    border: 1px solid transparent;
+    border-radius: 30px;
+    padding: 8px 30px;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.fa-edit {
+    color: orange;
+    font-size: var(--icon-size);
+}
+
+.fa-trash {
+    color: crimson;
+    font-size: var(--icon-size);
+}
+
+.comment_list{
+    margin: 50px auto 0 auto;
+    width: 100%;
+    text-align: left;
+}
+
+.comment_header{
+    font-size: 18px;
+    margin: 20px auto 0px auto;
+ }
+
+.comment_body{
+    margin: 10px 20px 50px 20px;
+    font-size: 18px;
+}
+
+.FBicon {
+}
+
+.insta-icon {
+}
+
+.linked-in {
+}
+
+.tweet {
+}
+
+.yt {
+}
+
+.test {
+    display: none;
+}
+
+
+@media only screen and (max-width: 768px) {
+     .container { 
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+    }
+    .content {
+         display: flex;
+         flex-direction: column;
+         position: relative;
+         width: 98%;
+         margin: 0 auto;
+     }
+
+     .leftside {
+        width: 90%;
+        margin: 0 auto;
+     }
+
+     .right-side {
+        width: 90%;
+        margin: 0 auto;
+     }
+
+    .comment_list{
+        margin: 50px auto 0 auto;
+        width: 90%;
+        text-align: left;
+    }
+
+    .PCS {
+    }
+
+    .Ing-Inst {
+    }
+
+    .nutrition-facts {
+    }
+
+    .Recipe-img {
+    }
+    
+    textarea {
+    }
+
+    .starbox {
+    }
+
+    .rating {
+    }
+
+    .RecipePic {
+    }
+}

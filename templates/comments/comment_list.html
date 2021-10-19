@@ -1,13 +1,14 @@
 <div class="comment_list" id="comment_list">
     {% spaceless %}
     {% for comment in page_obj %}
-    <div class="comment_header" id="comment_{{ comment.id }}">{{ comment.profile|title }}&nbsp;&nbsp;|&nbsp;
-        Posted {{ comment.created_on|date:"M d, Y h:i A" }}&nbsp;
+    <div class="comment_header" id="comment_{{ comment.id }}"><b>{{ comment.profile|title }}</b>&nbsp;&nbsp;|&nbsp;
+        Posted {{ comment.created_on|date:"M d, Y h:i A" }}
+        <br />
         {% if comment.edited %}
-        |&nbsp;&nbsp;<i title="Edited on {{ comment.created_on }}">(edited {{ comment.edited_on|timesince }} ago)</i>
+        <i title="Edited on {{ comment.created_on }}">Edited {{ comment.edited_on|timesince }} ago</i>
         {% endif %}
         {% if user == comment.profile.user %}
-        &nbsp;
+        &nbsp;&nbsp;|&nbsp;&nbsp;
         <a href="{% url 'comments:edit_comment' comment.id %}"><i class="fa fa-edit" title="Edit comment"></i></a>
         &nbsp;&nbsp;|&nbsp;&nbsp;
         <a href="{% url 'comments:delete_comment' comment.id %}"><i class="fa fa-trash" title="Delete comment"></i></a>

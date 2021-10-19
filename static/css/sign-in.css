@@ -1,0 +1,219 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: auto;
+    background-color: #a5a5a53b;
+}
+
+ h1 {
+    font-size: 20px;
+}
+
+.FAR {
+    position: relative;
+    top: 10px;
+    height: 30px;
+    left: 210px;
+}
+
+.SITYA {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 1%;
+    position: relative;
+}
+
+.need-account {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 0%;
+    position: relative;
+}
+
+.search-bubbles {
+    margin: 6% auto;
+    display: flex;
+    justify-content: center;
+    width: 40%;
+    min-width: 230px;
+}
+
+form {
+    width: 100%;
+}
+
+.email-label {
+    position: relative;
+}
+
+.pw-label {
+    position: relative;
+}
+
+input {
+/*    font-size: 16px;
+    text-indent: 5%;
+    background: transparent;
+    background-image: url("images/landing-page-images/search.svg");
+    background-repeat: no-repeat;
+    background-position: 95% 50%;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+    border-radius: 50px;*/
+}
+
+input[type="text"]:focus {
+    outline: none;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    transform: scale(1.04)
+}
+
+input[type='checkbox'] {
+/*    width: 20px;
+    height: 20px;*/
+}
+
+label[type='checkbox'] {
+/*    position: relative;*/
+}
+
+label > input[type="checkbox"] {
+    display: none;
+}
+
+label > input[type="checkbox"] + *::before {
+    content: "";
+    display: inline-block;
+    vertical-align: bottom;
+    width: 18px;
+    height: 18px;
+    border-radius: 10%;
+    border-style: solid;
+    border-width: 0.1rem;
+    border-color: gray;
+    position: relative;
+    background-color: white;
+    margin: 0 5px;
+}
+
+label > input[type="checkbox"]:checked + *::before {
+    content: "✓";
+    color: white;
+    text-align: center;
+    background: teal;
+    border-color: teal;
+}
+
+label > input[type="checkbox"]:checked + * {
+/*    color: rgb(19, 22, 202);*/
+}
+
+.email-bubble {
+    font-size: 16px;
+    /*background: transparent;*/
+    width: 100%;
+    height: 48px;
+    border-radius: 48px;
+    position: relative;
+    text-indent: 5%;
+    border: 1.5px solid black;
+    text-align: left;
+}
+
+.pw-bubble {
+    font-size: 16px;
+    /*background: transparent;*/
+    width: 100%;
+    height: 48px;
+    border-radius: 48px;
+    position: relative;
+    text-indent: 5%;
+    border: 1.5px solid black;
+    text-align: left;
+}
+
+.SI {
+    width: 100%;
+    height: 48px;
+    border-radius: 48px;
+    position: relative;
+    text-indent: 5%;
+    border: 1.5px solid transparent;
+    background-color: #bfc3c0;
+    text-align: center;
+    cursor: pointer;
+}
+
+.SIWG {
+    width: 480px;
+    height: 48px;
+    border-radius: 48px;
+    border: solid black;
+    position: relative;
+    left: -90px;
+    top: 220px;
+    outline: none;
+    text-indent: 5%;
+    border: 1.5px solid black;
+    background-color: black;
+    text-align: center;
+    color: white;
+}
+
+.keep_forgot {
+    display: flex;
+    flex-direction: row;
+}
+
+.keep {
+    width: 50%;
+}
+
+.forgot-pass {
+    width: 50%;
+    text-align: right;
+}
+
+.link {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+.bottom {
+    background-color: white;
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    height: 120px;
+}
+
+.blurb2 {
+    text-align: center;
+    width: 100%;
+    box-shadow: 0px 8px 8px lightgrey;
+    margin: 0 auto;
+    background-color: white;
+}
+
+.blurb2 img {
+    margin: 10px auto;
+}
+
+.second-logo {
+    position: relative;
+    bottom: -280px;
+    left: 550px;
+}

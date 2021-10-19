@@ -1,39 +1,54 @@
-{% extends "accounts/accounts_base.html" %}
-{% block title %}Edit Your Comment{% endblock %}
-{% load static %}
-{% block like_css %}
-{% endblock like_css %}
-{% block content %}
-<div class="comment_section">
-    <div class="comment_box">
-        <h1 class="heading">Edit your comment!</h1>
-        <br/>
-        <div class="comment_form">
-            {% if user.is_authenticated %}
-            <form action="{% url 'comments:edit_comment' comment.id %}" method="POST">
-                {% csrf_token %}
-                <h3>Username: {{ comment.profile }}</h3>
-                <br/>
-                <strong>Recipe:</strong>
-                {{ comment.recipe }}
-                <br/>
-                <br/>
-                {{ form.body }}
-                <div class="form_errors">{{ form.body.errors.as_text|escape }}</div>
-                <div class="form_button">
-                    <input type="submit" name="Update" value="Update Comment">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/Landing-page.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recipe_header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/edit_comment.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <title>SoDelicious</title>
+    <link rel="icon" href="{% static 'images/landing-page-images/SD.svg' %}">
+</head>
+<body>
+
+    {% include 'recipes/recipe_header.html' %}
+
+    <div class="comment_section">
+        <div class="comment_box">
+            <h1 class="heading">Edit your comment!</h1>
+            <br/>
+            <div class="comment_form">
+                {% if user.is_authenticated %}
+                <form action="{% url 'comments:edit_comment' comment.id %}" method="POST">
+                    {% csrf_token %}
+                    <h3>Username: {{ comment.profile }}</h3>
+                    <br/>
+                    <strong>Recipe:</strong>
+                    {{ comment.recipe }}
                     <br/>
                     <br/>
+                    {{ form.body }}
+                    <div class="form_errors">{{ form.body.errors.as_text|escape }}</div>
+                    <div class="form_button">
+                        <input class="comment_submit" type="submit" name="Update" value="Update Comment">
+                        <br/>
+                        <br/>
+                        <br/>
+                        <input class="comment_cancel" type="submit" name="Cancel" value="Cancel">
+                    </div>
                     <br/>
-                    <input type="submit" name="Cancel" value="Cancel">
-                </div>
-                <br/>
-            </form>
-            {% else %}
-            <p>Login to leave feedback!</p>
-            {% endif %}
+                </form>
+                {% else %}
+                <p>Login to leave feedback!</p>
+                {% endif %}
+            </div>
         </div>
+        <br/>
     </div>
-    <br/>
-</div>
-{% endblock %}
+</body>
+</html>

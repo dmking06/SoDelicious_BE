@@ -1,70 +1,162 @@
-{% extends "accounts/accounts_base.html" %}
-{% block title %}Details for {{ product.name }}{% endblock %}
-{% load static %}
-{% block like_css %}
-<link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
-{% endblock like_css %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/recipe_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recipe_header.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
+    <title>{{ recipe.name }}</title>
+</head>
+<body>
+<div class="page-container">
 
-<div class="content">
-    <div class="left">
-        {% if "/static/images/products/image_not_found.png" in product.image_url %}
-        <a href="{{ product.image_url }}"><img src="{{ product.image_url }}" alt="{{ product.name }}"
-                                               title="{{ product.name }}" /></a>
-        {% else %}
-        <a href="{{ product.image.url }}"><img src="{{ product.image.url }}" alt="{{ product.name }}"
-                                               title="{{ product.name }}" /></a>
-        {% endif %}
-        <p style="text-align: center">(Click to view full-size image)</p>
-        <br/>
-        <br/>
-        <br/>
+    {% include 'recipes/recipe_header.html' %}
 
-        {% include 'products/like_button.html' %}
-    </div>
-    <div class="right">
-        <div class="productName"><h1>{{ product.name|title }}</h1></div>
-        <br/>
-        <div class="stars"  title="{{ product.stars }}">
-            {% for x in product.star_list %}
-            {% if x == 1 %}
-            <i class="fa fa-star fa-2x" style="color: gold;"></i>
-            {% elif x == 2 %}
-            <i class="fa fa-star-half fa-2x" style="color: gold;"></i>
-            {% elif x == 0 %}
-            <i class="fa fa-star fa-2x" style="color: lightgrey;"></i>
-            {% endif %}
-            {% endfor %}
-        </div>
-        <br/>
-        <div>
-            <h2>Prices:</h2>
-            <table class="cost">
-                <tr>
-                    <td>Amazon:</td>
-                    <td><a href="{{ product.amazon_url }}">${{ product.amazon_price }}</a></td>
-                </tr>
-                <tr>
-                    <td>Ebay:</td>
-                    <td><a href="{{ product.ebay_url }}">${{ product.ebay_price }}</a></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><h4>{{ product.savings }}</h4></td>
-                </tr>
-            </table>
-        </div>
-        <br/>
-        <div>
-            <h2>About this item:</h2>
-            <ul class="info">
-                {% for line in list_lines %}
-                <li>{{ line }}</li>
+    <div class="content">
+        <div class="leftside">
+            <div class="recipe_category">
+                {% for category in recipe.category.all %}
+                <h1>{{ category }} Recipe</h1>
                 {% endfor %}
-            </ul>
+            </div>
+            <div class="recipe_name">
+                <h1>{{ recipe.name }} Recipe</h1>
+            </div>
+
+            {% spaceless %}
+            <div class="starbox">
+                {% for x in overall_rating %}
+                {% if x == 1 %}
+                <a id="{{ forloop.counter }}" class="rating_icon">
+                    <img src="{% static 'images/RecipePage1-Images/star_fill.svg' %}">
+                </a>
+                {% elif x == 2 %}
+                <a id="{{ forloop.counter }}" class="rating_icon">
+                    <img src="{% static 'images/RecipePage1-Images/star_fill.svg' %}">
+                </a>
+                {% elif x == 0 %}
+                <a id="{{ forloop.counter }}" class="rating_icon">
+                    <img src="{% static 'images/RecipePage1-Images/star_empty.svg' %}">
+                </a>
+                {% endif %}
+                {% endfor %}
+                {% endspaceless %}
+            </div>
+            {% if user.is_authenticated %}
+            <p id="ratings_message">Click a star to rate this recipe!</p>
+            {% else %}
+            <p id="ratings_message">Login to rate this recipe!</p>
+            {% endif %}
+
+            <div class="RecipePic">
+                {% if not recipe.image %}
+                <img src="{% static 'images/recipes/image_not_found.png' %}">
+                {% else %}
+                <a href="{{ recipe.image}}">
+                    <img src="{{ recipe_image }}" alt="{{ recipe.name }}">
+                </a>
+                {% endif %}
+                {% comment %}
+                <img class="Recipe-img" src="{% static 'images/RecipePage1-Images/stewpic.svg' %}" alt="stew picture" width="750" height="400">
+                {% endcomment %}
+            </div>
+
+            {% comment %}
+            <form action="/html/tags/html_form_tag_action.cfm" method="post">
+                <div>
+                    <textarea placeholder="Comment Here! *Must log in to rate or comment*" cols="45" rows="8"></textarea>
+                </div>
+                <input class="comment_submit" type="submit" value="Submit">
+            </form>
+            {% endcomment %}
+
+            {% include 'comments/comments.html' %}
+        </div>
+
+        <div class="right-side">
+            <div class="PCS">
+                <p><b>Prep: {{ recipe.prep_time }} mins.&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+                    Cook: {{ recipe.cook_time }} mins.&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;Serves {{ recipe.servings }}</b></p>
+            </div>
+
+            <div class="Ing-Inst">
+                <p><b>Ingredients/Instructions</b></p>
+            </div>
+
+            <div class="steps">
+                {% for step in step_lines %}
+                <div class="step_container">
+                    <div class="step_num">
+                        <p><b>Step {{ forloop.counter }} - </b></p>
+                    </div>
+                    <div class="step">
+                        <p>{{ step|safe }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="nutrition-facts">
+                <p><b>Nutrition Facts:</b> {{ recipe.nutrition }}</p>
+            </div>
         </div>
     </div>
+
+    {% include 'recipes/recipe_footer.html' %}
+
 </div>
 
-{% include 'comments/comments.html' %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+// AJAX CALL
+$('.like_icon').click(function(){
+    $.ajax({
+             type: "POST",
+             url: "{% url 'recipes:like' %}",
+             data: {'likes_id': $(this).attr('id'),
+                    'recipe_id': {{ recipe.pk }},
+                    'operation':'like_submit',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+             },
+             dataType: "json",
+             success: function(response) {
+                selector = document.getElementById(response.likes_id);
+                $(selector).css("color", response.new_color);
+                document.getElementById('likes_count').innerHTML = response.likes_count;
+              }
+        });
+  })
 
-{% endblock %}}
+
+$('.rating_icon').click(function(){
+    $.ajax({
+             type: "POST",
+             url: "{% url 'recipes:rate' %}",
+             data: {'ratings_id': $(this).attr('id'),
+                    'recipe_pk': {{ recipe.pk }},
+                    'operation':'rating_submit',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+             },
+             dataType: "json",
+             success: function(response) {
+                console.log("success")
+                document.getElementById('ratings_message').innerHTML = "Thank you for your rating!";
+                {% comment %}
+                response.colors.forEach((color, index) => {
+                    selector = document.getElementById(index + 1);
+                    $(selector).css("color", color);
+                });
+                {% endcomment %}
+             }
+        });
+  })
+</script>
+</body>
+</html>

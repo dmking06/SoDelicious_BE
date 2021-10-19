@@ -1,0 +1,110 @@
+{% comment %}
+<h3>Search Results for "{{ request.GET.keyword }}":</h3>
+{% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/general_list.css' %}">
+  <link rel="stylesheet" href="{% static 'css/recipe_header.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+  <title>{{ title }}</title>
+  <link rel="icon" href="{% static 'images/landing-page-images/SD.svg' %}">
+</head>
+<body>
+<div class="page-container">
+
+  {% include 'recipes/recipe_header.html' %}
+
+  <form action="{% url 'recipes:search_results' %}" method="get">
+    <div class="search">
+      <input name="keyword" type="text" placeholder="What are you craving?">
+      <button class="search_icon" type="submit">
+        <img src="{% static 'images/landing-page-images/search.svg' %}">
+      </button>
+    </div>
+  </form>
+
+  <div class="social-icons">
+    <a href="https://www.facebook.com/" id="fb"><img src="{% static 'images/landing-page-images/fb-icon.svg' %}"></a>
+    <a href="https://www.instagram.com/" id="ig"><img src="{% static 'images/landing-page-images/instagram.svg' %}"></a>
+    <a href="https://www.linkedin.com/" id="li"><img src="{% static 'images/landing-page-images/linkedin.svg' %}"></a>
+    <a href="https://twitter.com/" id="tw"><img src="{% static 'images/landing-page-images/twitter.svg' %}"></a>
+    <a href="https://www.youtube.com/" id="yt"><img src="{% static 'images/landing-page-images/youtube.svg' %}"></a>
+  </div>
+
+  <div class="recipes"><h1>{{ header }}</h1></div>
+  <div class="grid-container-main">
+
+    {% for item in item_list %}
+    <div class="grid-item-main">
+      <div class="grid-image-container">
+        {% if type == "recipe" %}
+        <a href="{% url 'recipes:recipe' item.pk %}">
+        {% elif type == "category" %}
+        <a href="{% url 'recipes:category' item.pk %}">
+        {% endif %}
+          {% if not item.image %}
+          <img src="{% static 'images/recipes/image_not_found.png' %}">
+          {% else %}
+          <img src="{{ item.image }}" alt="{{ item.name }}">
+          {% endif %}
+        </a>
+      </div>
+      {% if type == "recipe" %}
+      <a href="{% url 'recipes:recipe' item.pk %}">
+      {% elif type == "category" %}
+      <a href="{% url 'recipes:category' item.pk %}">
+      {% endif %}
+        <p>{{ item.name|wordwrap:16|linebreaksbr }}</p>
+      </a>
+    </div>
+    {% empty %}
+    <div class="recipes"><h3>Come back soon for some great recipes!</h3></div>
+    {% endfor item %}
+  </div>
+
+  {% if is_paginated or page_obj.has_other_pages %}
+  <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; First</a>&nbsp;&nbsp;
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>&nbsp;&nbsp;
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}&nbsp;&nbsp;
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>&nbsp;&nbsp;
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+    </span>
+  </div>
+  {% endif %}
+
+  <svg id="svg">
+    <defs>
+      <filter id="colorFilter">
+        <feColorMatrix
+                color-interpolation-filters="sRGB"
+                type="matrix"
+                values="0.46 0   0   0   0
+                0   0.46  0   0   0
+                0   0   0.46  0   0
+                0   0   0   1   0 "/>
+      </filter>
+    </defs>
+  </svg>
+  <footer>
+    <p>Company © SoDelicious. All rights reserved.</p>
+  </footer>
+</div>
+</body>
+</html>

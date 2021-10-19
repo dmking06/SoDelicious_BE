@@ -59,6 +59,7 @@ class Category(models.Model):
 class Recipe(models.Model):
     name = models.CharField(max_length=200, unique=True)
     submitted_by = models.ForeignKey(Profile, on_delete=models.CASCADE, default=None, null=True)
+    average_rating = models.DecimalField(max_digits=2, decimal_places=1, blank=True, default=0.0)
     category = models.ManyToManyField(Category, blank=True, default=None)
     description = models.TextField(blank=True, null=True, default=None)
     prep_time = models.IntegerField(blank=True, null=True, default=None)

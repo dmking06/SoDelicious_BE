@@ -1,32 +1,28 @@
-from django.shortcuts import render
-
 # Create your views here.
 import decimal
 import json
+import random
+import re
 
-import cloudinary.uploader
 import environ
 import requests
-from django.contrib import messages
+# from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.staticfiles.storage import staticfiles_storage
-from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
 
-from users.decorators import superuser_only, unauthenticated_user
-from users.models import Profile
 from comments.models import Comment
+from users.models import Profile
 from .models import Recipe, Category, Rating
 
 env = environ.Env()
 environ.Env.read_env()
 
 # Items per page for Recipe Lists
-ipp = 8
+ipp = 10
 
 # Like icon details
 liked = "gold"
@@ -36,6 +32,8 @@ unliked = "lightgrey"
 icon_up = "fa fa-angle-double-up"
 icon_down = "fa fa-angle-double-down"
 
+# Site title
+title = "So Delicious"
 
 # For getting average rating
 # Recipe.objects.annotate(avg_rating=Avg('ratings__rating')).order_by('-avg_rating')
@@ -51,8 +49,12 @@ def landing_page(request):
             recipe.image = None
         else:
             recipe.image = temp.image.url
-    context = {'latest_recipes': latest_recipes}
-    return render(request, 'recipes/landing_page.html', context)
+    context = {'item_list': latest_recipes,
+               'title': "SoDelicious - Ethnic Cultures Recipes",
+               'header': "Latest Recipes",
+               'type': 'recipe',
+               }
+    return render(request, 'recipes/general_list.html', context)
 
 
 # About Us page
@@ -62,9 +64,9 @@ def about_us_view(request):
 
 # Search bar
 class SearchResultsView(ListView):
-    model = Recipe
-    template_name = 'recipes/search_results.html'
-    context_object_name = 'recipe_list'
+    paginate_by = ipp
+    template_name = 'recipes/general_list.html'
+    context_object_name = 'item_list'
 
     def get_queryset(self):
         query = self.request.GET.get('keyword')
@@ -75,24 +77,54 @@ class SearchResultsView(ListView):
                 Q(description__icontains=query) |
                 Q(ingredients__icontains=query)
                 ).order_by("name")
+
+        # Get image for recipes
+        for recipe in recipe_list:
+            temp = recipe.album.images.filter(default=True).first()
+            if temp is None:
+                recipe.image = None
+            else:
+                recipe.image = temp.image.url
         return recipe_list
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchResultsView, self).get_context_data(**kwargs)
+        context['title'] = f"Search Results - {title}"
+        context['header'] = f"Search Results for \"{self.request.GET.get('keyword')}\""
+        context['type'] = "recipe"
+        context['icon_up'] = icon_up
+        context['icon_down'] = icon_down
+        return context
 
 
 # Category List
 class CategoryListView(ListView):
-    template_name = 'recipes/category_list.html'
+    template_name = 'recipes/general_list.html'
     paginate_by = ipp
-    context_object_name = 'category_list'
+    context_object_name = 'item_list'
 
     def get_queryset(self):
         path = self.request.path
         categories = Category.objects.order_by("name")
+
+        # Get image from first recipe in category
+        for category in categories:
+            recipe = Recipe.objects.filter(category=category).first()
+            if recipe is not None:
+                temp = recipe.album.images.filter(default=True).first()
+                if temp is None:
+                    category.image = None
+                else:
+                    category.image = temp.image.url
+            else:
+                category.image = temp.image.url
         return categories
 
     def get_context_data(self, **kwargs):
         context = super(CategoryListView, self).get_context_data(**kwargs)
-        context['title'] = f"Category List"
-
+        context['title'] = f"Category List - {title}"
+        context['header'] = f"Category List"
+        context['type'] = "category"
         context['icon_up'] = icon_up
         context['icon_down'] = icon_down
         return context
@@ -101,25 +133,58 @@ class CategoryListView(ListView):
 # Category Detail
 class CategoryDetailView(DetailView):
     model = Category
-    template_name = 'recipes/category.html'
+    paginate_by = ipp
+    template_name = 'recipes/general_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoryDetailView, self).get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        category = self.object
+
+        recipes = []
+        for recipe in category.recipe_set.all():
+            # Get image for recipe
+            temp = recipe.album.images.filter(default=True).first()
+            if temp is None:
+                recipe.image = None
+            else:
+                recipe.image = temp.image.url
+            recipes.append(recipe)
+
+        context['item_list'] = recipes
+        context['title'] = f"{category} Recipe List - {title}"
+        context['header'] = f"{category} Recipe List"
+        context['type'] = "recipe"
+        context['icon_up'] = icon_up
+        context['icon_down'] = icon_down
+        return context
 
 
 # Recipe List - also used for Liked and Edit recipes
 class RecipeListView(ListView):
-    template_name = 'recipes/recipe_list.html'
+    template_name = 'recipes/general_list.html'
     paginate_by = ipp
-    context_object_name = 'recipe_list'
+    context_object_name = 'item_list'
 
     def get_queryset(self):
         path = self.request.path
         sort = get_order(self.request)
         recipes = Recipe.objects.order_by(sort)
+
+        # Get image for recipe
+        for recipe in recipes:
+            temp = recipe.album.images.filter(default=True).first()
+            if temp is None:
+                recipe.image = None
+            else:
+                recipe.image = temp.image.url
         return recipes
 
     def get_context_data(self, **kwargs):
         context = super(RecipeListView, self).get_context_data(**kwargs)
-        context['title'] = f"Recipe List"
-
+        context['title'] = f"Recipe List - {title}"
+        context['header'] = f"Recipe List"
+        context['type'] = "recipe"
         context['icon_up'] = icon_up
         context['icon_down'] = icon_down
         return context
@@ -128,12 +193,20 @@ class RecipeListView(ListView):
 # Recipe Detail
 class RecipeDetailView(DetailView):
     model = Recipe
-    template_name = 'recipes/recipe.html'
+    template_name = 'recipes/recipe_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super(RecipeDetailView, self).get_context_data(**kwargs)
         pk = self.kwargs['pk']
         recipe = self.object
+
+        # Get image
+        temp = recipe.album.images.filter(default=True).first()
+        if temp is None:
+            recipe.image = None
+        else:
+            recipe.image = temp.image.url
+            context['recipe_image'] = recipe.image
 
         # Comment list, paginated
         comments = Comment.objects.filter(recipe_id=pk)
@@ -152,11 +225,8 @@ class RecipeDetailView(DetailView):
                 context['like_color'] = liked
 
         # Overall Rating
-        recipe_rating = Rating.objects.filter(recipe=recipe)
-        if recipe_rating:
-            overall_rating = decimal.Decimal(recipe.get_avg_rating())
-        else:
-            overall_rating = decimal.Decimal(0)
+        update_avg_rating(recipe)
+        overall_rating = recipe.average_rating
         overall_stars = get_stars(overall_rating)
         context['overall_rating'] = overall_stars
 
@@ -176,12 +246,40 @@ class RecipeDetailView(DetailView):
 
         context['colors'] = colors
 
-        # Split description into list of lines
+        # Split ingredients into list of lines
         ingredients = recipe.ingredients.splitlines()
         context['ingredient_lines'] = ingredients
+
+        # Bold ingredients in steps
+        for x in ingredients:
+            recipe.steps = re.sub(re.escape(x), f"<b>{x}</b>", recipe.steps)
+
+        # Split steps into list of lines
         steps = recipe.steps.splitlines()
         context['step_lines'] = steps
         return context
+
+
+# Recipe Detail
+def highly_rec(request):
+    # # Get all recipes with average rating >= 4.0
+    # recipes = list(Recipe.objects.filter(average_rating__gte=4.0))
+    #
+    # # Select random recipe
+    # random_recipe = random.choice(recipes)
+
+    recipe = Recipe.objects.filter(average_rating__gte=4.0).first()
+
+    # Get image
+    temp = recipe.album.images.filter(default=True).first()
+    if temp is None:
+        recipe.image = None
+    else:
+        recipe.image = temp.image.url
+
+    context = {'recipe': recipe,
+               'recipe_image': recipe.image}
+    return render(request, 'recipes/highly_rec.html', context)
 
 
 # Like button
@@ -226,6 +324,9 @@ def rating_button(request):
             rating.rating = int(ratings_id)
             rating.save()
 
+            # Update recipe average rating
+            update_avg_rating(recipe)
+
             # Get colors for user rating stars
             colors = []
             for x in range(1, 6):
@@ -245,6 +346,18 @@ def liked_recipes_view(request):
     return RecipeListView.as_view()(request)
 
 
+# Update average rating
+def update_avg_rating(recipe: Recipe):
+    recipe_rating = Rating.objects.filter(recipe=recipe)
+    if recipe_rating:
+        overall_rating = decimal.Decimal(recipe.get_avg_rating())
+    else:
+        overall_rating = decimal.Decimal(0)
+
+    recipe.average_rating = overall_rating
+    recipe.save()
+
+
 # Create star list
 def get_stars(rating: decimal) -> list:
     stars = []
@@ -255,20 +368,6 @@ def get_stars(rating: decimal) -> list:
         stars.append(2)
     while len(stars) < 5:
         stars.append(0)
-
-    # whole_stars, half_stars = rating.as_tuple()[1]
-    # no_stars = rating.as_tuple()[0]
-    # stars = []
-    # if no_stars:
-    #     stars = [0, 0, 0, 0, 0]
-    # else:
-    #     whole_stars, half_stars = rating.as_tuple()[1]
-    #     for x in range(0, whole_stars):
-    #         stars.append(1)
-    #     if half_stars >= 5:
-    #         stars.append(2)
-    #     while len(stars) < 5:
-    #         stars.append(0)
     return stars
 
 
