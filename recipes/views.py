@@ -8,15 +8,18 @@ import environ
 import requests
 # from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
+from django.core.validators import EmailValidator
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import DetailView, ListView
 
 from comments.models import Comment
+from recipes.forms import SubscribeForm
 from users.models import Profile
-from .models import Recipe, Category, Rating
+from .models import Recipe, Category, Rating, Subscribed
 
 env = environ.Env()
 environ.Env.read_env()
@@ -50,7 +53,7 @@ def landing_page(request):
         else:
             recipe.image = temp.image.url
     context = {'item_list': latest_recipes,
-               'title': "SoDelicious - Ethnic Cultures Recipes",
+               'title': "SoDelicious - Ethnic-Inspired Recipes",
                'header': "Latest Recipes",
                'type': 'recipe',
                }
@@ -60,6 +63,11 @@ def landing_page(request):
 # About Us page
 def about_us_view(request):
     return render(request, 'recipes/about_us.html')
+
+
+# Contact Us page
+def contact_us_view(request):
+    return render(request, 'recipes/contact_us.html')
 
 
 # Search bar
@@ -122,8 +130,8 @@ class CategoryListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CategoryListView, self).get_context_data(**kwargs)
-        context['title'] = f"Category List - {title}"
-        context['header'] = f"Category List"
+        context['title'] = f"Recipe Categories - {title}"
+        context['header'] = f"Recipe Categories"
         context['type'] = "category"
         context['icon_up'] = icon_up
         context['icon_down'] = icon_down
@@ -152,8 +160,8 @@ class CategoryDetailView(DetailView):
             recipes.append(recipe)
 
         context['item_list'] = recipes
-        context['title'] = f"{category} Recipe List - {title}"
-        context['header'] = f"{category} Recipe List"
+        context['title'] = f"{category} Recipes - {title}"
+        context['header'] = f"{category} Recipes"
         context['type'] = "recipe"
         context['icon_up'] = icon_up
         context['icon_down'] = icon_down
@@ -182,8 +190,8 @@ class RecipeListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(RecipeListView, self).get_context_data(**kwargs)
-        context['title'] = f"Recipe List - {title}"
-        context['header'] = f"Recipe List"
+        context['title'] = f"Recipes - {title}"
+        context['header'] = f"Recipes"
         context['type'] = "recipe"
         context['icon_up'] = icon_up
         context['icon_down'] = icon_down
@@ -306,6 +314,46 @@ def like_button(request):
                        "likes_id"   : likes_id
                        }
             return HttpResponse(json.dumps(context), content_type='application/json')
+
+
+# Subscribe page
+def subscribe_view(request):
+    form = SubscribeForm
+
+    # Check if request was POST
+    if request.method == 'POST':
+        form = SubscribeForm(request.POST)
+
+        if form.is_valid():
+            email = form.cleaned_data['email']
+        else:
+            email = request.POST.get('email-sub')
+
+        try:
+            EmailValidator()(email)
+            valid = True
+        except ValidationError:
+            valid = False
+
+        if valid:
+            # Save subscription
+            (sub, new) = Subscribed.objects.get_or_create(email=email)
+            context = {
+                'subscription': sub,
+                'new': new,
+                }
+
+            # Search profiles for email and mark as subscribed
+            profile = Profile.objects.filter(user__email=email).first()
+            if profile is not None:
+                profile.subscribed = True
+                profile.save()
+
+            return render(request, 'recipes/subscribe_results.html', context)
+
+    # Render page with any bound data and error messages
+    context = {'form': form}
+    return render(request, 'recipes/subscribe.html', context)
 
 
 # User rating

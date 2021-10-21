@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/contact_us.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recipe_header.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
+    <title>About Us - SoDelicious</title>
+</head>
+<body>
+    <div class="page-container">
+    {% include 'recipes/recipe_header.html' %}
+
+        <div class="contents">
+            <div class="CU">
+                <h1>ABOUT US</h1>
+            </div>
+
+            <div class="Message">
+                <p>
+                    <b>Hi! SoDelicious began in 2021, we aim to give you a recipe
+                        experience unlike anything you have seen before. We want to
+                        inspire you to make African, Asian, Caribbean and Indigenous
+                        inspired recipes. We also want to encourage you to try the
+                        restaurants recommended on this website.</b>
+                </p>
+                <br />
+                <br />
+                <br />
+                <p>
+                    <b>An important detail about our website is that we have all
+                        ingredients within the directions to make it easier to
+                        prepare the recipe while using your device.</b>
+                </p>
+                <br />
+            </div>
+
+            <div class="thanksContainer">
+                <h2>Happy Scrolling<br />and<br />Thank you for visiting!</h2>
+                <p>
+                    <br />Please feel free to subscribe or log in to leave a rating or comment.
+                </p>
+            </div>
+            {% include 'recipes/recipe_footer.html' %}
+        </div>
+    </div>
+</body>
+</html>

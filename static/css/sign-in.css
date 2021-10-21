@@ -37,9 +37,22 @@ body {
     margin: 0 auto;
     display: flex;
     justify-content: center;
-    width: 100%;
+    width: 40%;
     padding-top: 0%;
     position: relative;
+}
+
+.display_text {
+    margin: 0 auto;
+    justify-content: center;
+    width: 40%;
+    padding-top: 0%;
+    position: relative;
+    text-align: center;
+}
+
+.display_text ul li {
+    text-align: left;
 }
 
 .search-bubbles {
@@ -120,7 +133,8 @@ label > input[type="checkbox"]:checked + * {
 /*    color: rgb(19, 22, 202);*/
 }
 
-.email-bubble {
+.email-bubble,
+#id_email {
     font-size: 16px;
     /*background: transparent;*/
     width: 100%;
@@ -132,7 +146,11 @@ label > input[type="checkbox"]:checked + * {
     text-align: left;
 }
 
-.pw-bubble {
+.pw-bubble,
+#id_password1,
+#id_password2,
+#id_new_password1,
+#id_new_password2 {
     font-size: 16px;
     /*background: transparent;*/
     width: 100%;
@@ -154,6 +172,7 @@ label > input[type="checkbox"]:checked + * {
     background-color: #bfc3c0;
     text-align: center;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .SIWG {

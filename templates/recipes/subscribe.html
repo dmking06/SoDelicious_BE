@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="screen and (max-width: 600px)" href="{% static 'css/subscribe.css' %}">
+    <link rel="stylesheet" href="{% static 'css/subscribe.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recipe_header.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <title>Subscribe - SoDelicious</title>
+    <link rel="icon" href="{% static 'images/landing-page-images/SD.svg' %}">
+</head>
+
+<body>
+    <div class="page-container">
+
+        {% include 'recipes/recipe_header.html' %}
+
+        <!-- Body -->
+        <div class="body">
+            <div class="h1">
+                <h1>Get Our Best Recipes <br> Every Day</h1>
+            
+                <h3>Delivered straight to your inbox</h3>
+            </div>
+            <div class="center">
+                <form action="{% url 'subscribe' %}" class="form" method="post">
+                    {% csrf_token %}
+                    {{ form.email }}
+                    {{ form.email.errors.as_text|escape }}
+
+                    <input class="submit" type="submit" value="GET THE RECIPES">
+                    <a class="button_link" href="{% url 'landing_page' %}">
+                        <button class="button" type="button">NO THANKS</button>
+                    </a>
+                </form>    
+            </div>
+
+            <div class="h4">
+                <h4>Will be used in accordance with our User Agreement and Privacy Policy & Cookie Statement</h4>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

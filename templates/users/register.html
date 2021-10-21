@@ -1,64 +1,65 @@
-<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/sign-in.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recipe_header.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <title>Register - SoDelicious</title>
+    <link rel="icon" href="{% static 'images/landing-page-images/SD.svg' %}">
+</head>
 <body>
-{% include 'recipes/link_header.html' %}
-<h1 class="text-center"><strong>Register</strong></h1>
-<br/>
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-<form action="{% url 'users:register' %}" method="POST">
-    {% csrf_token %}
-    <!--    <div>-->
-    <!--        {% if form.errors %}-->
-    <!--            {% for field in form %}-->
-    <!--                {% for error in field.errors %}-->
-    <!--                <div class="alert alert-danger">-->
-    <!--                    <strong>{{field.label}}: {{ error|escape }}</strong>-->
-    <!--                </div>-->
-    <!--                {% endfor %}-->
-    <!--            {% endfor %}-->
-    <!--            {% for error in form.non_field_errors %}-->
-    <!--                <div class="alert alert-danger">-->
-    <!--                    <strong>{{ error|escape }}</strong>-->
-    <!--                </div>-->
-    <!--            {% endfor %}-->
-    <!--        {% endif %}-->
-    <!--    </div>-->
-    <!--    <br/>-->
-    <br/>
-    {{ form.email.label }}
-    {{ form.email }}
-    {{ form.email.errors.as_text|escape }}
-    <br/>
-    <i>{{ form.email.help_text }}</i>
+<div class="page-container">
 
-    <br/>
-    <br/>
-    {{ form.full_name.label }}
-    {{ form.full_name }}
-    {{ form.full_name.errors.as_text|escape }}
+    {% include 'recipes/recipe_header.html' %}
 
-    <br/>
-    <br/>
-    {{ form.password1.label }}
-    {{ form.password1 }}
-    {{ form.password1.errors.as_text|escape }}
-    <br/>
-    <strong><i>{{ form.password1.help_text }}</i></strong>
+    <div class="main">
+        <div class="SITYA">
+            <h1>Register for an account</h1>
+        </div>
 
-    <br/>
-    <br/>
-    {{ form.password2.label }}
-    {{ form.password2 }}
-    {{ form.password2.errors.as_text|escape }}
-    <br/>
-    <p><input type="submit" value="Sign Up"></p>
-    <br/>
-</form>
-<p>Already registered? <a href="{% url 'users:login' %}">Log In!</a></p>
+        <div class="search-bubbles">
+            <form action="{% url 'users:register' %}" method="post">
+                {% csrf_token %}
+                <b><label class="email-label">{{ form.email.label }}</label></b>
+                &nbsp;&nbsp;&nbsp;<i>* {{ form.email.help_text }}</i>
+                <br/>
+                {{ form.email }}
+                <br/>
+                {{ form.email.errors.as_text|escape }}
+                <br/>
+                <br/>
+                <b><label class="pw-label">{{ form.password1.label }}</label></b>
+                <br/>
+                {{ form.password1 }}
+                <br/>
+                {{ form.password1.errors.as_text|escape }}
+                <br/>
+                <br/>
+                <b><label class="pw-label">{{ form.password2.label }}</label></b>
+                <br/>
+                {{ form.password2 }}
+                <br/>
+                {{ form.password2.errors.as_text|escape }}
+                <br />
+                <br />
+                <input class="SI" type="submit" value="REGISTER">
+            </form>
+        </div>
+    </div>
+
+    <div class="bottom">
+        <div class="blurb2">
+            <img src="{% static 'images/Highly-rec-images/So Delicious.png' %}" alt="so delicious logo" id="logo">
+            <p id="rec">Recipes you want to make.<br />Cooking advice that works.</p>
+        </div>
+        {% include 'recipes/recipe_footer.html' %}
+    </div>
+</div>
 </body>
 </html>

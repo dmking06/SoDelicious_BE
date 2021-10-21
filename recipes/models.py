@@ -93,3 +93,10 @@ class Rating(models.Model):
 
     def __str__(self):
         return f"{self.profile} rates {self.recipe} a {self.rating}/5"
+
+
+class Subscribed(models.Model):
+    email = models.EmailField(unique=True, )
+
+    def __str__(self):
+        return f"{self.email}"

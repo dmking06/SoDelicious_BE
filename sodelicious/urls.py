@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
-from recipes.views import landing_page
+from recipes.views import landing_page, about_us_view, contact_us_view, subscribe_view
 
 urlpatterns = [
                   # Admin pages
@@ -12,6 +12,15 @@ urlpatterns = [
 
                   # Homepage
                   path('', landing_page, name='landing_page'),
+
+                  # About Us
+                  path('about_us/', about_us_view, name='about_us'),
+
+                  # Contact Us
+                  path('contact_us/', contact_us_view, name='contact_us'),
+
+                  # Subscribe
+                  path('subscribe/', subscribe_view, name='subscribe'),
 
                   # apps
                   path('users/', include('users.urls')),

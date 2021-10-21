@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
-    <title>{{ recipe.name }}</title>
+    <title>{{ recipe.name }} - SoDelicious</title>
 </head>
 <body>
 <div class="page-container">
@@ -39,7 +39,7 @@
                 </a>
                 {% elif x == 2 %}
                 <a id="{{ forloop.counter }}" class="rating_icon">
-                    <img src="{% static 'images/RecipePage1-Images/star_fill.svg' %}">
+                    <img src="{% static 'images/RecipePage1-Images/star_half.png' %}">
                 </a>
                 {% elif x == 0 %}
                 <a id="{{ forloop.counter }}" class="rating_icon">

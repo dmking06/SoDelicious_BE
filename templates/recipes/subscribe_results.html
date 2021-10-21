@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/contact_us.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recipe_header.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
+    <title>Thank you for subscribing! - SoDelicious</title>
+</head>
+<body>
+    <div class="page-container">
+    {% include 'recipes/recipe_header.html' %}
+
+        <div class="contents">
+            {% if new %}
+            <div class="CU">
+                <h1>Thanks for subscribing!</h1>
+            </div>
+
+            <div class="thanksContainer">
+                <p>
+                    You will receive a confirmation email shortly. Afterwards,<br />
+                    keep an eye on your inbox for recipes that are<br />
+                    <span style="font-family: 'Sacramento', cursive; font-size: 50px;">So-Delicious!</span>
+                </p>
+            </div>
+            {%else %}
+            <div class="CU">
+                <h1>This email is already subscribed.</h1>
+            </div>
+
+            <div class="thanksContainer">
+            <p>
+                If you have not received a confirmation email,<br />
+                please contact us at <a href="emailto:sodelicious.webapp@gmail.com">SoDelicious.webapp@gmail.com</a><br />
+            </p>
+            {% endif %}
+        </div>
+            {% include 'recipes/recipe_footer.html' %}
+        </div>
+    </div>
+</body>
+</html>

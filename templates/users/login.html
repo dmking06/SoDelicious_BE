@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
-    <title>Home</title>
+    <title>Login - SoDelicious</title>
     <link rel="icon" href="{% static 'images/landing-page-images/SD.svg' %}">
 </head>
 <body>
@@ -31,12 +30,12 @@
         <div class="search-bubbles">
             <form action="{% url 'users:login' %}" method="post">
                 {% csrf_token %}
-                <b><label class="email-label" for="email"> Email</label></b>
+                <b><label class="email-label" for="email">Email</label></b>
                 <br />
                 <input id="email" name="email" class="email-bubble" type="email" placeholder="Enter Email Address">
                 <br />
                 <br />
-                <b> <label class="pw-label" for="password"> Password</label> </b>
+                <b> <label class="pw-label" for="password">Password</label> </b>
                 <br />
                 <input id="password" name="password" class="pw-bubble" type="Password" placeholder="Password">
                 <br />

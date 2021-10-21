@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/contact_us.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recipe_header.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
+    <title>Contact Us - SoDelicious</title>
+</head>
+<body>
+    <div class="page-container">
+    {% include 'recipes/recipe_header.html' %}
+
+        <div class="contents">
+            <div class="CU">
+                <h1>CONTACT US</h1>
+            </div>
+
+            <div class="Message">
+                <p>
+                    <b>Anything we can help with or you want to say how much
+                        you're enjoying using <span style="font-family: 'Sacramento', cursive;">So-Delicious</span>?
+                    <br>Send us a message! We aim to make your experience the best!</b>
+                </p>
+            </div>
+
+            <table>
+                <tr>
+                    <td class="homelogo"><img src="{% static 'images/ContactUsImages/home.svg' %}" alt="house logo" width="20" height="20"></td>
+                    <td class="address">12912 Good Food Drive,<br>Atlanta, Georgia 30625</td>
+                </tr>
+                <tr>
+                    <td class="maillogo"><img src="{% static 'images/ContactUsImages/mail.svg' %}" alt="mail logo" width="20" height="20"></td>
+                    <td class="email-Link"><a href="url">sodelicious@gmail.com</a></td>
+                </tr>
+                <tr>
+                    <td class="phonelogo"><img src="{% static 'images/ContactUsImages/phone.svg' %}" alt="mail logo" width="20" height="20"></td>
+                    <td class="phoneNumber">1-888-912-2177</td>
+                </tr>
+            </table>
+
+            <div class="thanksContainer">
+                <h2>Thank you for contacting us!</h2>
+                <p>
+                    <br />You will receive a confirmation email shortly. Expect<br>
+                    to receive a response in 1-3 business days.
+                </p>
+            </div>
+            {% include 'recipes/recipe_footer.html' %}
+        </div>
+    </div>
+</body>
+</html>
