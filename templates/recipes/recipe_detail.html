@@ -21,10 +21,13 @@
 
     <div class="content">
         <div class="leftside">
+            {% if user.is_admin or user.profile == recipe.submitted_by %}
+            <div class="recipe_name">
+                <a href="{% url 'recipes:edit_recipe' recipe.pk %}">Edit this recipe</a>
+            </div>
+            {% endif %}
             <div class="recipe_category">
-                {% for category in recipe.category.all %}
-                <h1>{{ category }} Recipe</h1>
-                {% endfor %}
+                <h1>{{ recipe.category }} Recipe</h1>
             </div>
             <div class="recipe_name">
                 <h1>{{ recipe.name }} Recipe</h1>
@@ -83,7 +86,8 @@
         <div class="right-side">
             <div class="PCS">
                 <p><b>Prep: {{ recipe.prep_time }} mins.&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-                    Cook: {{ recipe.cook_time }} mins.&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;Serves {{ recipe.servings }}</b></p>
+                    Cook: {{ recipe.cook_time }} mins.&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+                    Serves {{ recipe.servings }}</b></p>
             </div>
 
             <div class="Ing-Inst">

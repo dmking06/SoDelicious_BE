@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import RecipeDetailView, CategoryDetailView, RecipeListView, CategoryListView, liked_recipes_view, \
-    like_button, rating_button, SearchResultsView, highly_rec, about_us_view, contact_us_view, subscribe_view
+    like_button, rating_button, SearchResultsView, highly_rec, add_recipe, edit_recipe
 
 app_name = 'recipes'
 urlpatterns = [
@@ -19,6 +19,12 @@ urlpatterns = [
 
     # Recipe details
     path('<int:pk>/', RecipeDetailView.as_view(), name='recipe'),
+
+    # Add recipe
+    path('add_recipe/', add_recipe, name='add_recipe'),
+
+    # Edit recipe
+    path('edit/<int:pk>/', edit_recipe, name='edit_recipe'),
 
     # Rating
     path('rating/', rating_button, name='rate'),

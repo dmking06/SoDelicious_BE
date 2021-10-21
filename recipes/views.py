@@ -6,7 +6,7 @@ import re
 
 import environ
 import requests
-# from django.contrib import messages
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
@@ -17,9 +17,9 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import DetailView, ListView
 
 from comments.models import Comment
-from recipes.forms import SubscribeForm
+from recipes.forms import SubscribeForm, RecipeForm, ImageForm
 from users.models import Profile
-from .models import Recipe, Category, Rating, Subscribed
+from .models import Recipe, Category, Rating, Subscribed, Image
 
 env = environ.Env()
 environ.Env.read_env()
@@ -125,7 +125,7 @@ class CategoryListView(ListView):
                 else:
                     category.image = temp.image.url
             else:
-                category.image = temp.image.url
+                category.image = None
         return categories
 
     def get_context_data(self, **kwargs):
@@ -268,7 +268,105 @@ class RecipeDetailView(DetailView):
         return context
 
 
-# Recipe Detail
+# Add Recipe page
+@login_required(login_url="users:login")
+def add_recipe(request):
+    form = RecipeForm()
+    image_form = ImageForm
+    categories = Category.objects.all()
+
+    # Check if request was POST
+    if request.method == 'POST':
+        form = RecipeForm(request.POST)
+
+        if form.is_valid():
+            # Get category value
+            value = request.POST.get('category')
+            if value == "new_category":
+                value = request.POST.get('new_category')
+
+            # Get or create Category from value
+            (category, created) = Category.objects.get_or_create(name=value)
+
+            # Create recipe
+            recipe = form.save(commit=False)
+            recipe.submitted_by = request.user.profile
+            recipe.category = category
+            recipe.save()
+
+            # Set image if provided
+            image_form = ImageForm(request.POST, request.FILES)
+            if image_form.is_valid():
+                image = image_form.save(commit=False)
+                image.name = recipe.name + "_image"
+                image.submitted_by = request.user.profile
+                image.default = True
+                image.album = recipe.album
+                image.save()
+            return redirect('recipes:recipe', pk=recipe.pk)
+
+    # Render page with any bound data and error messages
+    context = {'form': form,
+               'image_form': image_form,
+               'categories': categories}
+    return render(request, 'recipes/add_recipe.html', context)
+
+
+# Add Recipe page
+@login_required(login_url="users:login")
+def edit_recipe(request, pk):
+    recipe = Recipe.objects.get(pk=pk)
+    form = RecipeForm(request.POST or None, instance=recipe)
+    image_form = ImageForm(request.POST, request.FILES or
+                           None, instance=Image.objects.filter(album=recipe.album, default=True).first())
+    categories = Category.objects.all()
+
+    # Check if request was POST
+    if request.method == 'POST':
+        # form = RecipeForm(request.POST)
+
+        if (form.is_valid() and form.has_changed()) or (image_form.is_valid() and image_form.has_changed()):
+
+            if form.is_valid() and form.has_changed():
+                # Get category value
+                value = request.POST.get('category')
+                if value == "new_category":
+                    value = request.POST.get('new_category')
+
+                # Get or create Category from value
+                (category, created) = Category.objects.get_or_create(name=value)
+
+                # Create recipe
+                recipe = form.save(commit=False)
+                recipe.submitted_by = request.user.profile
+                recipe.category = category
+                recipe.save()
+
+            # Set image if provided
+            if image_form.is_valid() and image_form.has_changed():
+                images = Image.objects.filter(album=recipe.album)
+                for x in images:
+                    x.default = False
+                    x.save()
+                image = image_form.save(commit=False)
+                image.name = recipe.name + "_image"
+                image.submitted_by = request.user.profile
+                image.default = True
+                image.album = recipe.album
+                image.save()
+            return redirect('recipes:recipe', pk=recipe.pk)
+        else:
+            messages.info(request, "No changes were made.")
+
+    # Render page with any bound data and error messages
+    context = {'recipe': recipe,
+               'form': form,
+               'image_form': image_form,
+               'categories': categories}
+    return render(request, 'recipes/edit_recipe.html', context)
+
+
+# Highly Recommended Recipe
 def highly_rec(request):
     # # Get all recipes with average rating >= 4.0
     # recipes = list(Recipe.objects.filter(average_rating__gte=4.0))

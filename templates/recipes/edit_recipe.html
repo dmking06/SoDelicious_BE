@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/modify_recipe.css' %}">
+    <link rel="stylesheet" href="{% static 'css/recipe_header.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
+    <title>Edit Recipe - SoDelicious</title>
+</head>
+<body>
+<div class="page-container">
+
+    {% include 'recipes/recipe_header.html' %}
+
+    <div class="page_title"><h1>Edit Recipe</h1></div>
+    <div class="form_section">
+        <form action="{% url 'recipes:edit_recipe' recipe.pk %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for x in form %}
+            <div class="entry_section">
+                <div class="entry_label">{{ x.label }}</div>
+                {% if x.label == "Steps" %}
+                <ul>
+                    <li>Do not include step numbers</li>
+                    <li>Put each step on a new line</li>
+                    <li>For the ingredients to be bolded in the step, they must
+                        be exactly as they appear in the "Ingredients" section
+                        above (including the measurement amounts)</li>
+                </ul>
+                {% endif %}
+                <div class="entry_input">{{ x }}</div>
+                <div class="entry_errors">{{ x.errors.as_text|escape }}</div>
+            </div>
+            {% if x.label == "Recipe name" %}
+            <div class="entry_section">
+                <div class="entry_label">Category: </div>
+                {% for x in categories %}
+                <input type="radio" id="{{ x }}" name="category" value="{{ x }}" {% if recipe.category == x %}checked{% endif %}>
+                <label for="{{ x }}">{{ x }}</label>
+                <br />
+                {% endfor %}
+                <div class="entry_input">
+                    <input type="radio" id="new" name="category" value="new_category">
+                    <label for="new">New category: </label>
+                    <input type="text" name="new_category" />
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            <div class="entry_section">
+                <div class="entry_label">{{ image_form.image.label }}</div>
+                <div class="entry_input">{{ image_form.image }}</div>
+                <div class="entry_errors">{{ image_form.image.errors.as_text|escape }}</div>
+            </div>
+            <input class="submit" type="submit" value="Modify Recipe" />
+        </form>
+    </div>
+
+    {% include 'recipes/recipe_footer.html' %}
+
+</div>
+</body>
+</html>
