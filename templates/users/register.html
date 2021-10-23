@@ -23,6 +23,10 @@
             <h1>Register for an account</h1>
         </div>
 
+        <div class="need-account">
+            <p>Have an account? <a class="link" href="{% url 'users:login' %}">Sign in.</a></p>
+        </div>
+
         <div class="search-bubbles">
             <form action="{% url 'users:register' %}" method="post">
                 {% csrf_token %}

@@ -1,0 +1,7 @@
+{% autoescape off %}
+Hi {{ user }},
+
+Welcome to {{ app }}. Login through the link below.
+
+{{ scheme }}://{{ domain }}{% url 'users:login' %}
+{% endautoescape %}

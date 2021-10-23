@@ -10,7 +10,7 @@ body {
     height: 100%;
     position: relative;
     overflow: auto;
-    background-color: #a5a5a53b;
+    /*background-color: #a5a5a53b;*/
 }
 
  h1 {
@@ -24,12 +24,16 @@ body {
     left: 210px;
 }
 
+.main {
+    background-color: #a5a5a53b;
+}
+
 .SITYA {
     margin: 0 auto;
     display: flex;
     justify-content: center;
     width: 100%;
-    padding-top: 1%;
+    padding-top: 2%;
     position: relative;
 }
 
@@ -56,11 +60,13 @@ body {
 }
 
 .search-bubbles {
-    margin: 6% auto;
+    margin: 0 auto;
     display: flex;
     justify-content: center;
     width: 40%;
     min-width: 230px;
+    padding-top: 60px;
+    padding-bottom: 60px;
 }
 
 form {
@@ -214,8 +220,6 @@ label > input[type="checkbox"]:checked + * {
 .bottom {
     background-color: white;
     width: 100%;
-    position: fixed;
-    bottom: 0px;
     height: 120px;
 }
 

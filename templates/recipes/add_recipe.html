@@ -12,14 +12,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
-    <title>Add Recipe - SoDelicious</title>
+    <title>{{ title }} - SoDelicious</title>
 </head>
 <body>
 <div class="page-container">
 
     {% include 'recipes/recipe_header.html' %}
 
-    <div class="page_title"><h1>Add Recipe</h1></div>
+    <div class="page_title"><h1>{{ title }}</h1></div>
     <div class="form_section">
         <form action="{% url 'recipes:add_recipe' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -42,7 +42,11 @@
             <div class="entry_section">
                 <div class="entry_label">Category: </div>
                 {% for x in categories %}
+                {% if "Add" in title %}
                 <input type="radio" id="{{ x }}" name="category" value="{{ x }}" {% if forloop.first %}checked{% endif %}>
+                {% elif "Edit" in title %}
+                <input type="radio" id="{{ x }}" name="category" value="{{ x }}" {% if recipe.category == x %}checked{% endif %}>
+                {% endif %}
                 <label for="{{ x }}">{{ x }}</label>
                 <br />
                 {% endfor %}

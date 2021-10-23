@@ -19,6 +19,7 @@ from django.views.generic import DetailView, ListView
 from comments.models import Comment
 from recipes.forms import SubscribeForm, RecipeForm, ImageForm
 from users.models import Profile
+from users.decorators import superuser_only
 from .models import Recipe, Category, Rating, Subscribed, Image
 
 env = environ.Env()
@@ -308,12 +309,14 @@ def add_recipe(request):
     # Render page with any bound data and error messages
     context = {'form': form,
                'image_form': image_form,
-               'categories': categories}
+               'categories': categories,
+               'title': "Add Recipe"}
     return render(request, 'recipes/add_recipe.html', context)
 
 
 # Add Recipe page
 @login_required(login_url="users:login")
+@superuser_only
 def edit_recipe(request, pk):
     recipe = Recipe.objects.get(pk=pk)
     form = RecipeForm(request.POST or None, instance=recipe)
@@ -324,22 +327,27 @@ def edit_recipe(request, pk):
     # Check if request was POST
     if request.method == 'POST':
         # form = RecipeForm(request.POST)
+        # Get category value
+        value = request.POST.get('category')
+        if value == "new_category":
+            value = request.POST.get('new_category')
 
-        if (form.is_valid() and form.has_changed()) or (image_form.is_valid() and image_form.has_changed()):
+        # Get or create Category from value
+        (category, created) = Category.objects.get_or_create(name=value)
 
-            if form.is_valid() and form.has_changed():
-                # Get category value
-                value = request.POST.get('category')
-                if value == "new_category":
-                    value = request.POST.get('new_category')
+        if (form.is_valid() and form.has_changed()) or (image_form.is_valid() and image_form.has_changed()) or\
+                (recipe.category != category):
 
-                # Get or create Category from value
-                (category, created) = Category.objects.get_or_create(name=value)
-
-                # Create recipe
-                recipe = form.save(commit=False)
-                recipe.submitted_by = request.user.profile
+            # Update recipe category
+            if recipe.category != category:
                 recipe.category = category
+                recipe.save()
+
+            # Update the rest of the recipe
+            if form.is_valid() and form.has_changed():
+                # Update recipe
+                recipe = form.save(commit=False)
+                # recipe.category = category
                 recipe.save()
 
             # Set image if provided
@@ -362,7 +370,8 @@ def edit_recipe(request, pk):
     context = {'recipe': recipe,
                'form': form,
                'image_form': image_form,
-               'categories': categories}
+               'categories': categories,
+               'title': "Edit Recipe"}
     return render(request, 'recipes/edit_recipe.html', context)
 
 
@@ -448,10 +457,57 @@ def subscribe_view(request):
                 profile.save()
 
             return render(request, 'recipes/subscribe_results.html', context)
+        else:
+            messages.error(request, f"Please enter a valid email.")
 
     # Render page with any bound data and error messages
     context = {'form': form}
     return render(request, 'recipes/subscribe.html', context)
+
+
+# Unsubscribe page
+def unsubscribe_view(request):
+    form = SubscribeForm
+
+    # Check if request was POST
+    if request.method == 'POST':
+        form = SubscribeForm(request.POST)
+
+        if form.is_valid():
+            email = form.cleaned_data['email']
+        else:
+            email = request.POST.get('email-sub')
+
+        try:
+            EmailValidator()(email)
+            valid = True
+        except ValidationError:
+            valid = False
+
+        if valid:
+            # Save subscription
+            sub = Subscribed.objects.filter(email=email).first()
+            sub.delete()
+
+            # Search profiles for email and mark as unsubscribed
+            profile = Profile.objects.filter(user__email=email).first()
+            if profile is not None:
+                profile.subscribed = False
+                profile.save()
+
+            context = {
+                'subscription': sub,
+                'new': False,
+                'unsub': 'unsub',
+                }
+
+            return render(request, 'recipes/subscribe_results.html', context)
+        else:
+            messages.error(request, f"Please enter a valid email.")
+
+    # Render page with any bound data and error messages
+    context = {'form': form}
+    return render(request, 'recipes/unsubscribe.html', context)
 
 
 # User rating

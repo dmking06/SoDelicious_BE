@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
-from recipes.views import landing_page, about_us_view, contact_us_view, subscribe_view
+from recipes.views import landing_page, about_us_view, contact_us_view, subscribe_view, unsubscribe_view
 
 urlpatterns = [
                   # Admin pages
@@ -21,6 +21,9 @@ urlpatterns = [
 
                   # Subscribe
                   path('subscribe/', subscribe_view, name='subscribe'),
+
+                  # Unsubscribe
+                  path('unsubscribe/', unsubscribe_view, name='unsubscribe'),
 
                   # apps
                   path('users/', include('users.urls')),

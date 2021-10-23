@@ -22,12 +22,17 @@
         <h3 id="blurb">Hi! Thank you for checking out our weekly recommended recipes and restaurants.
             Please feel free to log in and leave a rating or comment on the recipes and restaurants.</h3>
     </div>
-    <br />
-    <br />
+
     <div class="food">
         <div class="recipe">
             <a href="{% url 'recipes:recipe' recipe.pk %}">
-                <img class="food-image" src="{{ recipe_image }}" alt="{{ recipe.name }}">
+                {% if not recipe.image %}
+                <img src="{% static 'images/recipes/image_not_found.png' %}">
+                {% else %}
+                <a href="{{ recipe.image}}">
+                    <img src="{{ recipe_image }}" alt="{{ recipe.name }}">
+                </a>
+                {% endif %}
             </a>
             <div>
                 <h1 id="recipe">RECIPE <br> OF <br> THE WEEK </h1>

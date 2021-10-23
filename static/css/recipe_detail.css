@@ -261,6 +261,11 @@ left: 20px;
 
 .step {
     width: 100%;
+    line-height: 140%;
+}
+
+.step b {
+    font-size: 105%;
 }
 
 .nutrition-facts {

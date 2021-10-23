@@ -45,7 +45,7 @@ class MyUserManager(BaseUserManager):
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(_('email address'), unique=True, help_text="Required and case-sensitive.")
+    email = models.EmailField(_('email address'), unique=True, help_text="Case-sensitive.")
     is_admin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'

@@ -32,6 +32,15 @@
                     <span style="font-family: 'Sacramento', cursive; font-size: 50px;">So-Delicious!</span>
                 </p>
             </div>
+            {%elif unsub == "unsub" %}
+            <div class="CU">
+                <h1>This email has been unsubscribed.</h1>
+            </div>
+
+            <div class="thanksContainer">
+                <p>
+                    If you ever change your mind, re-subscribe <a href="{% url 'subscribe' %}">here</a>!<br />
+                </p>
             {%else %}
             <div class="CU">
                 <h1>This email is already subscribed.</h1>

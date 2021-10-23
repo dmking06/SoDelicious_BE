@@ -9,7 +9,7 @@ def unauthenticated_user(view_func):
 
         # If user is logged in, redirect to homepage
         if request.user.is_authenticated:
-            return redirect('index')
+            return redirect('landing_page')
 
         # If user is not logged in, show the page they tried to access
         else:
@@ -22,9 +22,9 @@ def superuser_only(view_func):
     def wrapper_func(request, *args, **kwargs):
 
         # If user is logged in, redirect to homepage
-        if not request.user.is_superuser:
+        if not request.user.is_admin:
             messages.error(request, f"You are not authorized to view this page")
-            return redirect('index')
+            return redirect('landing_page')
 
         # If user is not logged in, show the page they tried to access
         else:

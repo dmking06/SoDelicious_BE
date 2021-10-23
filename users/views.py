@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import smart_text, smart_bytes
@@ -83,17 +84,28 @@ def register_view(request):
                 # Create verification email
                 current_site = get_current_site(request)
                 subject = f"Activate your {app_name} Account"
-                message = render_to_string('users/activation_email.html',
-                                           {
-                                               'user'  : user,
-                                               'scheme': request.scheme,
-                                               'domain': current_site.domain,
-                                               'uid'   : urlsafe_base64_encode(smart_bytes(user.pk)),
-                                               'token' : account_activation_token.make_token(user),
-                                               })
-
+                html_message = render_to_string('users/activation_email.html',
+                                                {'user'  : user,
+                                                 'scheme': request.scheme,
+                                                 'domain': current_site.domain,
+                                                 'uid'   : urlsafe_base64_encode(smart_bytes(user.pk)),
+                                                 'token' : account_activation_token.make_token(user),
+                                                 })
+                text_message = render_to_string('users/activation_plain.html',
+                                                {'user'  : user,
+                                                 'scheme': request.scheme,
+                                                 'domain': current_site.domain,
+                                                 'uid'   : urlsafe_base64_encode(smart_bytes(user.pk)),
+                                                 'token' : account_activation_token.make_token(user),
+                                                 })
                 # Send email
-                user.email_user(subject, message)
+                send_mail(subject,
+                          text_message,
+                          'sodelicious.webapp@gmail.com',
+                          [user.email],
+                          html_message=html_message,
+                          )
+                # user.email_user(subject, message)
 
                 # Redirect to login page
                 messages.success(request, f'A verification email has been sent to {user.email}.')
@@ -138,16 +150,29 @@ def activate_view(request, uidb64, token):
             # Create confirmation email
             current_site = get_current_site(request)
             subject = f"{app_name} Registration complete."
-            message = render_to_string('users/confirmation_email.html',
-                                       {
-                                           'user'  : user,
-                                           'app'   : app_name,
-                                           'scheme': request.scheme,
-                                           'domain': current_site.domain,
-                                           })
+            html_message = render_to_string('users/confirmation_email.html',
+                                            {
+                                                 'user'  : user,
+                                                 'app'   : app_name,
+                                                 'scheme': request.scheme,
+                                                 'domain': current_site.domain,
+                                                 })
+            text_message = render_to_string('users/confirmation_email.html',
+                                            {
+                                                'user'  : user,
+                                                'app'   : app_name,
+                                                'scheme': request.scheme,
+                                                'domain': current_site.domain,
+                                                })
 
             # Send email
-            user.email_user(subject, message)
+            send_mail(subject,
+                      text_message,
+                      'sodelicious.webapp@gmail.com',
+                      [user.email],
+                      html_message=html_message,
+                      )
+            # user.email_user(subject, message)
 
             # Login the user
             login(request, user)

@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
-    <title>Subscribe - SoDelicious</title>
+    <title>Unsubscribe - SoDelicious</title>
     <link rel="icon" href="{% static 'images/landing-page-images/SD.svg' %}">
 </head>
 
@@ -23,26 +23,22 @@
         <!-- Body -->
         <div class="body">
             <div class="h1">
-                <h1>Get Our Best Recipes <br> Every Day</h1>
+                <h1>We're sorry to see you go</h1>
             
-                <h3>Delivered straight to your inbox</h3>
+                <h3>Enter you email to unsubscribe.<br />(Be aware the email on file is<br /><u><em>case-sensitive</em></u>)</h3>
             </div>
             <div class="center">
-                <form action="{% url 'subscribe' %}" class="form" method="post">
+                <form action="{% url 'unsubscribe' %}" class="form" method="post">
                     {% csrf_token %}
                     {{ form.email }}
                     {{ form.email.errors.as_text|escape }}
 
-                    <input class="submit" type="submit" value="GET THE RECIPES">
-                    <a class="button_link" href="{% url 'landing_page' %}">
-                        <button class="button" type="button">NO THANKS</button>
-                    </a>
+                    <input class="submit" type="submit" value="UNSUBSCRIBE">
                 </form>    
             </div>
 
             <div class="h4">
                 <h4>Will be used in accordance with our User Agreement and Privacy Policy & Cookie Statement</h4>
-                <a href="{% url 'unsubscribe' %}">Unsubscribe</a>
             </div>
         </div>
     </div>
