@@ -1,7 +1,7 @@
 <div class="comment_list" id="comment_list">
     {% spaceless %}
     {% for comment in page_obj %}
-    <div class="comment_header" id="comment_{{ comment.id }}"><b>{{ comment.profile|title }}</b>&nbsp;&nbsp;|&nbsp;
+    <div class="comment_header" id="comment_{{ comment.id }}"><b>{{ comment.profile }}</b>&nbsp;&nbsp;|&nbsp;
         Posted {{ comment.created_on|date:"M d, Y h:i A" }}
         <br />
         {% if comment.edited %}
